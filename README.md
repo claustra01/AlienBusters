@@ -8,3 +8,5 @@ npm run build
 npm run dev  
   
 http://localhost:3000
+
+client/pages/intex.tsx
