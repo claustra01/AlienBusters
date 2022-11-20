@@ -20,6 +20,10 @@ export default function Home() {
             <p>ルーム一覧</p>
           </Link>
 
+          <h1 className="text-orange-500 text-3xl font-bold underline">
+            this is tailwind
+          </h1>
+
         </main>
         
       </div>
