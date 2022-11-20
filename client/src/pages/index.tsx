@@ -24,6 +24,10 @@ export default function Home() {
             this is tailwind
           </h1>
 
+          <h1 className="text-cyan-500 text-3xl font-bold underline">
+            this is naka no branch
+          </h1>
+
         </main>
         
       </div>
