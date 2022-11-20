@@ -1,13 +1,13 @@
 version: '3.9'
 services:
-  db:
-    image: postgres:14
-    container_name: ${APP_NAME}_db
-    hostname: db
-    volumes:
-      - dbdata:/var/lib/postgresql/data
-    env_file:
-      - .env
+  # db:
+  #   image: postgres:14
+  #   container_name: ${APP_NAME}_db
+  #   hostname: db
+  #   volumes:
+  #     - dbdata:/var/lib/postgresql/data
+  #   env_file:
+  #     - .env
 
   server:
     build:
@@ -22,10 +22,10 @@ services:
       - .:/go/src/${APP_NAME}
     env_file:
       - .env
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
 
-volumes:
-  dbdata:
-    name: ${APP_NAME}_volume
+# volumes:
+#   dbdata:
+#     name: ${APP_NAME}_volume
 
