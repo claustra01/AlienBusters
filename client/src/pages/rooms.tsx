@@ -39,10 +39,11 @@ export default function Home() {
           <a>
             WebSocket is connected : {`${isConnected}`}
           </a>
-
-          <Link href="/">
-            <p>トップページ</p>
-          </Link>
+         <div className="top">
+           <Link href="/">
+             TopPage
+           </Link>
+          </div>
 
         </main>
         
