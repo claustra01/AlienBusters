@@ -1,34 +1,60 @@
 import React from 'react';
 
 export default function App() {
-    const mousePosition = useMousePosition();
-  
+
+    const [clientX, clientY] = useMousePosition();
+    const [screenWidth, screenHeight] = useWindowSize();
+    const [clientXf, clientYf] = [clientX/screenWidth, clientY/screenHeight];
+
     return (
-      <p>
-        Your cursor position:
-        <br />
-        {JSON.stringify(mousePosition)}
-      </p>
+        <p>
+            {`${clientX} x ${clientY}`}
+            <br/>
+            {`${screenWidth} x ${screenHeight}`}
+            <br/>
+            {`${clientXf} x ${clientYf}`}
+        </p>
     );
-  }
-  
-  const useMousePosition = () => {
+
+}
+
+const useMousePosition = () => {
     const [
-      mousePosition,
-      setMousePosition
-    ] = React.useState({ x: null, y: null });
-  
+        mousePosition,
+        setMousePosition
+    ] = React.useState([0, 0]);
+
     React.useEffect(() => {
-      const updateMousePosition = (ev: { clientX: any; clientY: any; }) => {
-        setMousePosition({ x: ev.clientX, y: ev.clientY });
-      };
-      
-      window.addEventListener('mousemove', updateMousePosition);
-  
-      return () => {
-        window.removeEventListener('mousemove', updateMousePosition);
-      };
+
+        const updateMousePosition = (event: { clientX: any; clientY: any; }) => {
+            setMousePosition([event.clientX, event.clientY]);
+        };
+
+        window.addEventListener('mousemove', updateMousePosition);
+        return () => window.removeEventListener('mousemove', updateMousePosition);
+        
     }, []);
-  
+
     return mousePosition;
-  };
+};
+
+const useWindowSize = (): number[] => {
+    const [
+        size,
+        setSize
+    ] = React.useState([0, 0]);
+
+    React.useLayoutEffect(() => {
+
+        const updateSize = (): void => {
+            setSize([window.innerWidth, window.innerHeight]);
+        };
+
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+
+    }, []);
+
+    return size;
+};
