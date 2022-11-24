@@ -21,7 +21,7 @@ export default function Home() {
                     <div className="subtitle">Let's Play Game! → 
 
                         <Link href="/rooms">
-                            <p>RoomList</p>
+                            <p className='roomlist'>RoomList</p>
                         </Link>
 
                         <div className="content">

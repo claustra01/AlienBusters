@@ -6,7 +6,7 @@ import styles from '../../styles/rooms.module.css'
 export default function Home() {
     return (
 
-        <div className='{styles.container} hogebody'>
+        <div className='{styles.container}'>
 
             <Head>
                 <title>Kizukuと愉快な仲間たち</title>
@@ -15,8 +15,8 @@ export default function Home() {
 
             <main className='{styles.main}'>
 
-                <div className="title">ghost busters
-                    <div className="subtitle">
+                <div>ghost busters
+                    <div>
 
                         <Link href="/">
                             <p>TopPage</p>
