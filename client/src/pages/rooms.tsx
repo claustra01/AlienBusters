@@ -4,7 +4,7 @@ import styles from '../../styles/rooms.module.css'
 
 import CustomHead from '../components/customhead'
 
-export default function Home() {
+export default function Rooms() {
     return (
 
         <div className='{styles.container}'>

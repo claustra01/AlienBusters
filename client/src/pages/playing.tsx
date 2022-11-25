@@ -1,20 +1,34 @@
 import React from 'react';
+import Link from 'next/link'
 
 import CustomHead from '../components/customhead'
 
-export default function App() {
+export default function Playing() {
 
     const [screenWidth, screenHeight] = useWindowSize();
     const [clientX, clientY] = [useMousePosition()[0]/screenWidth, useMousePosition()[1]/screenHeight];
 
     return (
         
-        <p>
-            <CustomHead/>
-            {`${screenWidth} x ${screenHeight}`}
-            <br/>
-            {`${clientX} x ${clientY}`}
-        </p>
+        <div className='{styles.container}'>
+            
+        <CustomHead/>
+
+            <main className='{styles.main}'>
+
+                    <Link href="/">
+                        <p>TopPage</p>
+                    </Link><br/>
+
+                    <p>
+                        {`${screenWidth}x${screenHeight}`}
+                        <br/>
+                        {`${clientX}x${clientY}`}
+                    </p>
+
+            </main>
+        </div>
+    
     );
 
 }
