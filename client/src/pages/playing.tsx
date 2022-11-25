@@ -1,12 +1,16 @@
 import React from 'react';
 
+import CustomHead from '../components/customhead'
+
 export default function App() {
 
     const [screenWidth, screenHeight] = useWindowSize();
     const [clientX, clientY] = [useMousePosition()[0]/screenWidth, useMousePosition()[1]/screenHeight];
 
     return (
+        
         <p>
+            <CustomHead/>
             {`${screenWidth} x ${screenHeight}`}
             <br/>
             {`${clientX} x ${clientY}`}
