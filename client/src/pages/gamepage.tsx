@@ -9,7 +9,22 @@ export default function Gamepage() {
       <div className='{styles.container}'>
          <CustomHead/>
 
-          <div className = "boxborder"></div>
+          <div className = "boxborder">
+           <ul>
+              <div> 
+               <div className = "questionbox"></div>
+               <div className = "scorebox"></div>
+              </div>
+              <div className = "displaybox">
+               <div className = "cardbox1"></div>
+               <div className = "cardbox2"></div>
+               <div className = "cardbox3"></div>
+               <div className = "cardbox4"></div>
+               <div className = "cardbox5"></div>
+              </div>
+           </ul>
+          </div>
+
 
          
 
