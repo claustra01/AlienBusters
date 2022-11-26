@@ -17,7 +17,7 @@ export default function Home() {
 
             <main className='{styles.main}'>
 
-                <div className="title">ghost busters
+                <div className="title">Alien Busters
                     <div className="subtitle">Let's Play Game! → 
 
                         <Link href="/rooms">
