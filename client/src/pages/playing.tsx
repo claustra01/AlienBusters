@@ -4,6 +4,7 @@ import Link from 'next/link'
 import styles from '../../styles/playing.module.css'
 
 import CustomHead from '../components/customhead'
+import { send } from 'process';
 
 export default function Playing() {
 
@@ -12,14 +13,18 @@ export default function Playing() {
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
 
-    const sendJson = createJson();
-    
+    const [uuid, setUuid] = React.useState('')
+    const [score, setScore] = React.useState(0)
+    const [progress, setProgress] = React.useState(0)
+    const sendJson = createJson(uuid, score)
+
     React.useEffect(() => {
         
         // Dockerでバックエンドを動かす時用
         socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
         // デプロイ先のバックエンドを動かす用
         // socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
+        
 
         console.log(socketRef)
         socketRef.current.onopen = function () {
@@ -29,29 +34,56 @@ export default function Playing() {
         
         socketRef.current.onclose = function () {
             console.log('closed')
+            localStorage.removeItem('uuid')
             setIsConnected(false)
         }
 
+        const id = setInterval(() => {
+            setSendMessage(sendJson)
+            sendSocket()
+            setProgress((e)=>e+1)
+        }, 100);
+
+        return () => {
+            clearInterval(id);
+        }
+        
     }, [])
 
-    const test = () => {
-        socketRef.current?.send(sendMessage)
-    }
-    if(socketRef.current){
-        socketRef.current.onmessage = function (ev) {
-            console.log(ev.data)
-            setMessage(ev.data)
-        }
-    }
     React.useEffect(()=>{
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
-                console.log(ev.data)
+                if (ev.data.indexOf('0') != 0) {
+                    console.log(ev.data)
+                    setUuid(ev.data)
+                }
                 setMessage(ev.data)
             }
         }
+    }, [socketRef.current])
 
-    },[socketRef.current?.onmessage])
+    const sendSocket = () => {
+        socketRef.current?.send(sendMessage)
+    }
+
+    const detRenderer = (prog: number) => {
+        var prog5sec: number = Math.floor(prog/50)
+        switch (prog5sec) {
+            case(0): return <div>Loading...</div>
+            case(1): return <div>Question1</div>
+            case(2): return <div>Question2</div>
+            case(3): return <div>Question3</div>
+            case(4): return <div>Question4</div>
+            case(5): return <div>Question5</div>
+            case(6): return <div>Question6</div>
+            case(7): return <div>Question7</div>
+            case(8): return <div>Question8</div>
+            case(9): return <div>Question9</div>
+            case(10): return <div>Question10</div>
+            case(11): return <div>Result</div>
+            default: return <div>Error!</div>
+        }
+    }
 
     return (
         
@@ -61,19 +93,16 @@ export default function Playing() {
 
             <main className='{styles.main}'>
 
-                    <h1>WebSocket is connected : {`${isConnected}`}</h1>
-
                     <Link href="/">
                         <p>TopPage</p>
                     </Link><br/>
 
-                    <div className="buttun"><button onClick={test}>test</button></div>
-                    <input onChange={(e)=>{setSendMessage(sendJson)}}>
-                    </input>
-
-                    <div>{message}</div>
-
-                    <img src="/minecraft.png" />;
+                    <p>WebSocket is connected : {`${isConnected}`}</p>
+                    
+                    {detRenderer(progress)}
+                    
+                    <p>{uuid}</p>
+                    <p>{message}</p>
 
             </main>
         </div>
@@ -123,7 +152,7 @@ const useMousePosition = () => {
     return mousePosition;
 };
 
-const createJson = () => {
+const createJson = (clientUUID: string, clientScore: number) => {
 
     const [clientX, clientY] = [
         useMousePosition()[0]/useWindowSize()[0],
@@ -131,8 +160,13 @@ const createJson = () => {
     ];
 
     var obj = {
-        name: "",
-        pos: [clientX, clientY]
+        name: clientUUID,
+        room: 0,
+        pos: {
+            x: clientX,
+            y: clientY
+        },
+        score: clientScore
     }
 
     return JSON.stringify(obj);
