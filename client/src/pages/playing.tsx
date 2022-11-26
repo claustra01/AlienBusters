@@ -4,6 +4,11 @@ import Link from 'next/link'
 import styles from '../../styles/playing.module.css'
 
 import CustomHead from '../components/customhead'
+import { send } from 'process';
+
+var clientUUID: string;
+const score: number = 0;
+const prog: number = 0;
 
 export default function Playing() {
 
@@ -12,8 +17,8 @@ export default function Playing() {
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
 
-    const sendJson = createJson();
-    
+    const sendJson = createJson(score)
+
     React.useEffect(() => {
         
         // Dockerでバックエンドを動かす時用
@@ -33,16 +38,23 @@ export default function Playing() {
         }
 
     }, [])
+   
+    setTimeout(() => {
+        setSendMessage(sendJson)
+        sendSocket()
+    }, 100);
 
-    const test = () => {
+    const sendSocket = () => {
         socketRef.current?.send(sendMessage)
     }
+
     if(socketRef.current){
         socketRef.current.onmessage = function (ev) {
             console.log(ev.data)
             setMessage(ev.data)
         }
     }
+
     React.useEffect(()=>{
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
@@ -50,7 +62,6 @@ export default function Playing() {
                 setMessage(ev.data)
             }
         }
-
     },[socketRef.current?.onmessage])
 
     return (
@@ -61,15 +72,11 @@ export default function Playing() {
 
             <main className='{styles.main}'>
 
-                    <h1>WebSocket is connected : {`${isConnected}`}</h1>
+                    <p>WebSocket is connected : {`${isConnected}`}</p>
 
                     <Link href="/">
                         <p>TopPage</p>
                     </Link><br/>
-
-                    <div className="buttun"><button onClick={test}>test</button></div>
-                    <input onChange={(e)=>{setSendMessage(sendJson)}}>
-                    </input>
 
                     <div>{message}</div>
 
@@ -123,7 +130,7 @@ const useMousePosition = () => {
     return mousePosition;
 };
 
-const createJson = () => {
+const createJson = (clientScore: number) => {
 
     const [clientX, clientY] = [
         useMousePosition()[0]/useWindowSize()[0],
@@ -131,8 +138,15 @@ const createJson = () => {
     ];
 
     var obj = {
-        name: "",
-        pos: [clientX, clientY]
+        mouse: true,
+        response: false,
+        room: 0,
+        name: clientUUID,
+        pos: {
+            x: clientX,
+            y: clientY
+        },
+        score: clientScore
     }
 
     return JSON.stringify(obj);
