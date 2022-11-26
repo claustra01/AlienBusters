@@ -28,6 +28,10 @@ export default function Rooms() {
                         <Link href="/test_socket">
                             <p>SocketTest</p>
                         </Link>
+                        <br></br>
+                        <Link href="/gamepage">
+                            <p>gamepage</p>
+                        </Link>
                         <div className="bird"></div>
                         <div className="bird -type_2"></div>
                         <div className="bird -type_3"></div>

@@ -73,7 +73,7 @@ export default function Playing() {
 
                     <div>{message}</div>
 
-                    <img src="/minecraft.png" />;
+                    {/* <img src="/minecraft.png" />; */}
 
             </main>
         </div>
