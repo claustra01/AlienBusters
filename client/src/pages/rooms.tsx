@@ -28,12 +28,13 @@ export default function Rooms() {
                         <Link href="/test_socket">
                             <p>SocketTest</p>
                         </Link>
+                        <div className="bird"></div>
+                        <div className="bird -type_2"></div>
+                        <div className="bird -type_3"></div>
 
                     </div>
                 </div>
 
-
-                <img src="./ailian-min.png" className = "sample"></img>
 
             </main>
         </div>
