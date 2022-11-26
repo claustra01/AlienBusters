@@ -12,12 +12,13 @@ export default function Playing() {
 
     const socketRef = React.useRef<WebSocket>()
     const [isConnected, setIsConnected] = React.useState(false)
-    const [message, setMessage] = React.useState('')
+    const [message, setMessage] = React.useState('AAA')
     const [sendMessage, setSendMessage] = React.useState('')
 
-    const [UUID, setUUID] = React.useState('')
+    const [uuid, setUuid] = React.useState('ABCD')
     const [score, setScore] = React.useState(0)
     const [progress, setProgress] = React.useState(0)
+    const [isGetUuid, setIsGetUuid] = React.useState(false)
     const sendJson = createJson(score)
 
     React.useEffect(() => {
@@ -26,63 +27,70 @@ export default function Playing() {
         socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
         // デプロイ先のバックエンドを動かす用
         // socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
-
+        
         console.log(socketRef)
         socketRef.current.onopen = function () {
             setIsConnected(true)
             console.log('Connected')
         }
         
-        
-        
         socketRef.current.onclose = function () {
             console.log('closed')
+            localStorage.removeItem('uuid')
             setIsConnected(false)
         }
         
-        // if(socketRef.current){
-        //     socketRef.current.onmessage = function (ev) {
-        //         console.log(ev.data)
-        //         setUUID(ev.data)
-        //     }
-        // }
     }, [])
 
     React.useEffect(()=>{
+
+        console.log(uuid)
+        if(socketRef.current){
+            socketRef.current.onmessage = function (ev) {
+                setMessage(()=>ev.data)
+                console.log('nowuuid:',ev.data)
+                if(localStorage.getItem('uuid') !== ev.data){
+                    if(!localStorage.getItem('uuid')){
+                        localStorage.setItem('uuid',ev.data)
+                    }
+                }
+                if(ev.data.indexOf('0') === 0) {
+                    // setUuid(()=>message)
+                }
+    
+                const Tuuid = localStorage.getItem('uuid')
+                if(Tuuid){
+                    setUuid(Tuuid)
+                    localStorage.removeItem('uuid')
+                }
+            }
+            // console.log(Tuuid)
+        }
         const id = setInterval(() => {
 
             setSendMessage(sendJson)
             sendSocket()
-        
-            setProgress(progress+1)
+
+            setProgress((e)=>e+1)
     
         }, 100);
-
-        if(socketRef.current){
-            socketRef.current.onmessage = function (ev) {
-                // console.log(ev.data)
-                if (UUID !== '')
-                    setMessage(ev.data)
-                else 
-                    setUUID(ev.data)
-            }
-        }
         return () => {
             clearInterval(id);
-          }
-    },[socketRef.current?.send])
+        }
+ 
+    },[])
 
     const sendSocket = () => {
         socketRef.current?.send(sendMessage)
+        /*
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
                 console.log(ev.data)
                 setMessage(ev.data)
             }
         }
+        */
     }
-   
-
 
     return (
         
@@ -97,8 +105,9 @@ export default function Playing() {
                     </Link><br/>
 
                     <p>WebSocket is connected : {`${isConnected}`}</p>
+                    {progress}
 
-                    <p>{UUID}</p>
+                    <p>{uuid}</p>
                     <p>{message}</p>
 
             </main>
