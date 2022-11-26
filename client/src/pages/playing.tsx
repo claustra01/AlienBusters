@@ -9,6 +9,8 @@ export default function App() {
         <br />
         {JSON.stringify(mousePosition)}
       </p>
+
+      
     );
   }
   

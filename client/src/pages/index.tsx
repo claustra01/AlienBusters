@@ -5,6 +5,7 @@ import styles from '../../styles/home.module.css'
 // import ghost from '../../styles/index.module.css'
 // import '../../styles/ghost.css'
 
+
 export default function Home() {
     return (
 
@@ -23,6 +24,7 @@ export default function Home() {
                         <Link href="/rooms">
                             <p className='roomlist'>RoomList</p>
                         </Link>
+                       
 
                         <div className="content">
 
@@ -44,11 +46,7 @@ export default function Home() {
                             </div>
 
                         </div>
-
-                        <div className="ailan" >
-                            <img src="./ailan.png"></img>
-
-                        </div>
+                            
                     </div>
                 </div>
 

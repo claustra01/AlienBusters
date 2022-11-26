@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../../styles/rooms.module.css'
 
+
 export default function Home() {
     return (
 
@@ -32,6 +33,8 @@ export default function Home() {
 
                     </div>
                 </div>
+
+                <img src="./ailian-min.png" className = "sample"></img>
 
             </main>
         </div>
