@@ -71,7 +71,7 @@ func (c *Client) readPump() {
 			break
 		}
 		// message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-		dat := MouthPost{}
+		dat := Post{}
 
 		if err := json.Unmarshal(message, &dat); err != nil {
 			log.Printf("error: %v", err)
