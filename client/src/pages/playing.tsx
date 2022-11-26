@@ -3,8 +3,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../../styles/playing.module.css'
 
-import CustomHead from '../components/customhead'
 import { send } from 'process';
+import { render } from 'react-dom';
+import { json } from 'stream/consumers';
+
+import CustomHead from '../components/customhead'
+
+var questions: number[];
 
 export default function Playing() {
 
@@ -50,7 +55,7 @@ export default function Playing() {
         // タイマー設定
         const id = setInterval(() => {
             setClock(true)
-        }, 50);
+        }, 100);
         return () => {
             clearInterval(id);
         }
@@ -66,7 +71,7 @@ export default function Playing() {
 
         if (message.indexOf('{') === 0) {
             const json = JSON.parse(message)
-            console.log(json.room)
+            questions = json.question
         }
 
         setClock(false)
@@ -102,24 +107,19 @@ export default function Playing() {
 
     return (
         
-        <div className='{styles.container}'>
+        <div>
             
-        <CustomHead/>
+            <CustomHead/>
 
-            <main className='{styles.main}'>
+            <Link href="/">
+                <p>TopPage</p>
+            </Link><br/>
 
-                <Link href="/">
-                    <p>TopPage</p>
-                </Link><br/>
+            <p>WebSocket is connected : {`${isConnected}`}</p>
+            
+            {detRenderer(progress)}
+            {renderPointers(message, uuid, windowSize)}
 
-                <p>WebSocket is connected : {`${isConnected}`}</p>
-                
-                {detRenderer(progress)}
-                
-                <p>{uuid}</p>
-                <p>{message}</p>
-
-            </main>
         </div>
 
     );
@@ -145,26 +145,6 @@ const detRenderer = (prog: number) => {
     }
 }
 
-const useMousePosition = () => {
-    const [
-        mousePosition,
-        setMousePosition
-    ] = React.useState([0, 0]);
-
-    React.useEffect(() => {
-
-        const updateMousePosition = (event: { clientX: any; clientY: any; }) => {
-            setMousePosition([event.clientX, event.clientY]);
-        };
-
-        window.addEventListener('mousemove', updateMousePosition);
-        return () => window.removeEventListener('mousemove', updateMousePosition);
-        
-    }, []);
-
-    return mousePosition;
-};
-
 const createJson = (uuid: string, windowSize: number[], mousePos: number[], score: number) => {
 
     var obj = {
@@ -178,5 +158,30 @@ const createJson = (uuid: string, windowSize: number[], mousePos: number[], scor
     }
 
     return JSON.stringify(obj);
+
+}
+
+const renderPointers = (message: string, uuid: string, windowSize: number[]) => {
+    console.log(message)
+    if (message.indexOf('{') === 0) {
+        const json = JSON.parse(message)
+        var ret = []
+        for (let id in json.pos) {
+            if (id != uuid) {
+                var x = (json.pos[id].x * windowSize[0]).toString() + 'px'
+                var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
+                var e = (
+                    <div style={{position: 'absolute', top: y, left: x}}>
+                        <img src={'/doseiblue.png'} alt='mouse pointer' width="20px"/>
+                    </div>
+                )
+                ret.push(e)
+            }
+        }
+        return ret
+    }
+}
+
+const renderScores = (scoreData: any, uuid: string) => {
 
 }
