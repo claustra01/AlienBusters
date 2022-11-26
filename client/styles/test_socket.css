@@ -1,0 +1,32 @@
+
+
+button{
+    top:5vmin;
+    width: 50px;
+    height:30px;
+    color:white;
+    border: 1px solid rgb(255, 255, 255);
+    font-family: 'Creepster', cursive;
+  
+}
+
+
+
+.inbox{
+    top:10vmin;
+    width: 100px;
+    height:50px;
+    color:white;
+    font-family: 'Creepster', cursive;
+  
+}
+
+.flagment{
+    width: 100px;
+    height:100px;
+    top:0vmin;
+    color:white;
+    font-family: 'Creepster', cursive;
+   
+   
+}

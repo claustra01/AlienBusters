@@ -44,6 +44,11 @@ export default function Home() {
                             </div>
 
                         </div>
+
+                        <div className="ailan" >
+                            <img src="./ailan.png"></img>
+
+                        </div>
                     </div>
                 </div>
 

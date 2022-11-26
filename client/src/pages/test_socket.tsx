@@ -65,11 +65,14 @@ export default function Test() {
       return (
         <div>
 
-          <h1>WebSocket is connected : {`${isConnected}`}</h1>
+          <h1  className="flagment">WebSocket is connected : {`${isConnected}`}</h1>
 
           <div className="buttun"><button onClick={test}>test</button></div>
-          <input onChange={(e)=>{setSendMessage(e.target.value)}}>
-          </input>
+
+          <div className="inbox">
+           <input onChange={(e)=>{setSendMessage(e.target.value)}}>
+           </input>
+          </div>
           <div>
             {message}
           </div>

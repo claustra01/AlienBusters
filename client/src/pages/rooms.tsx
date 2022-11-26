@@ -15,8 +15,8 @@ export default function Home() {
 
             <main className='{styles.main}'>
 
-                <div>ghost busters
-                    <div>
+                <div><div className="titlebox"><a>Ailan busters</a></div>
+                    <div className = "subbox">
 
                         <Link href="/">
                             <p>TopPage</p>

@@ -22,6 +22,8 @@ body {
   color: #ffffff;
 } 
 
+p{color:white;}
+
 * {
   box-sizing: border-box;
 }
@@ -35,15 +37,17 @@ body {
     background: rgb(0, 0, 0);
   }
 }
-
-body{
+ body{
   background: #000;
   
-}
+} 
 
 .buttun{
-  width:10px;
-  height:10px;
+  top:10vmin;
+
+  width: 30px;
+  height:30px;
+  color:white;
 }
 
 
