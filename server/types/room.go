@@ -12,6 +12,10 @@ type Room struct {
 
 	// Unregister requests from clients.
 	unregister chan *Client
+
+	question map[string][]int
+
+	senddata SendData
 }
 
 func NewRoom() *Room {
@@ -20,10 +24,13 @@ func NewRoom() *Room {
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
 		clients:    make(map[*Client]bool),
+		question:   map[string][]int{},
+		senddata:   *InitSendData(),
 	}
 }
 
 func (r *Room) Run() {
+	r.question["test"] = GenerateQ()
 	for {
 		select {
 		case client := <-r.register:
