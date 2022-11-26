@@ -1,11 +1,14 @@
 package types
 
 import (
+	"encoding/json"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/fasthttp/websocket"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/valyala/fasthttp"
 )
 
@@ -20,7 +23,7 @@ const (
 	pingPeriod = (pongWait * 9) / 10
 
 	// Maximum message size allowed from peer.
-	maxMessageSize = 512
+	maxMessageSize = 1024
 )
 
 // var (
@@ -45,6 +48,8 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	send chan []byte
+
+	id string
 }
 
 func (c *Client) readPump() {
@@ -52,11 +57,13 @@ func (c *Client) readPump() {
 		c.room.unregister <- c
 		c.conn.Close()
 	}()
+	// var v V
 	c.conn.SetReadLimit(maxMessageSize)
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		_, message, err := c.conn.ReadMessage()
+		// err := c.conn.ReadJSON(v)
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
@@ -64,8 +71,13 @@ func (c *Client) readPump() {
 			break
 		}
 		// message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
+		dat := MouthPost{}
 
-		c.room.broadcast <- message
+		if err := json.Unmarshal(message, &dat); err != nil {
+			log.Printf("error: %v", err)
+		}
+		log.Printf(strconv.Itoa(dat.Room))
+		c.room.broadcast <- []byte(strconv.Itoa(dat.Room))
 	}
 }
 
@@ -80,6 +92,7 @@ func (c *Client) writePump() {
 		ticker.Stop()
 		c.conn.Close()
 	}()
+	c.conn.WriteMessage(websocket.TextMessage, []byte(c.id))
 	for {
 		select {
 		case message, ok := <-c.send:
@@ -117,9 +130,11 @@ func (c *Client) writePump() {
 
 func (room *Room) ServeWs(ctx *fiber.Ctx) error {
 	err := upgrader.Upgrade(ctx.Context(), func(conn *websocket.Conn) {
-		client := &Client{room: room, conn: conn, send: make(chan []byte, 256)}
+		u, _ := uuid.NewRandom()
+		client := &Client{room: room, conn: conn, send: make(chan []byte, 512), id: u.String()}
 		client.room.register <- client
 		log.Println("tets")
+		log.Printf("uuid: %v", u.String())
 		go client.writePump()
 		client.readPump()
 	})

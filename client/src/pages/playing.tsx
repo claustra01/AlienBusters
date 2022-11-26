@@ -84,7 +84,7 @@ export default function Playing() {
 
             </main>
         </div>
-    
+
     );
 
 }
