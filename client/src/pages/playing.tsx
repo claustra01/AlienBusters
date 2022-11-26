@@ -8,6 +8,7 @@ import { render } from 'react-dom';
 import { json } from 'stream/consumers';
 
 import CustomHead from '../components/customhead'
+import GamePage from './gamepage'
 
 var questions: number[];
 
@@ -28,9 +29,9 @@ export default function Playing() {
     React.useEffect(() => {
         
         // Dockerでバックエンドを動かす時用
-        // socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
+        socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
         // デプロイ先のバックエンドを動かす用
-        socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
+        // socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
 
         // 接続時のソケット処理
         console.log(socketRef)
@@ -55,7 +56,7 @@ export default function Playing() {
         // タイマー設定
         const id = setInterval(() => {
             setClock(true)
-        }, 100);
+        }, 50);
         return () => {
             clearInterval(id);
         }
@@ -69,8 +70,8 @@ export default function Playing() {
         sendSocket()
         setProgress(progress+1)
 
-        if (message.indexOf('{') === 0) {
-            const json = JSON.parse(message)
+        if (jsonFormatter(message).indexOf('{') === 0) {
+            const json = JSON.parse(jsonFormatter(message))
             questions = json.question
         }
 
@@ -108,18 +109,9 @@ export default function Playing() {
     return (
         
         <div>
-            
             <CustomHead/>
-
-            <Link href="/">
-                <p>TopPage</p>
-            </Link><br/>
-
-            <p>WebSocket is connected : {`${isConnected}`}</p>
-            
             {detRenderer(progress)}
-            {renderPointers(message, uuid, windowSize)}
-
+            {renderPointers(jsonFormatter(message), uuid, windowSize)}
         </div>
 
     );
@@ -127,9 +119,9 @@ export default function Playing() {
 }
 
 const detRenderer = (prog: number) => {
-    var prog5sec: number = Math.floor(prog/50)
+    var prog5sec: number = Math.floor(prog/100)
     switch (prog5sec) {
-        case(0): return <div>Loading...</div>
+        case(0): return <GamePage/>
         case(1): return <div>Question1</div>
         case(2): return <div>Question2</div>
         case(3): return <div>Question3</div>
@@ -167,7 +159,7 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
         const json = JSON.parse(message)
         var ret = []
         for (let id in json.pos) {
-            if (id != uuid) {
+            if (id === uuid) {
                 var x = (json.pos[id].x * windowSize[0]).toString() + 'px'
                 var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
                 var e = (
@@ -184,4 +176,10 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
 
 const renderScores = (scoreData: any, uuid: string) => {
 
+}
+
+const jsonFormatter = (json: string) => {
+    var n = json.indexOf('}{')
+    if (n == -1) return json
+    else return json.substring(0,n+1)
 }
