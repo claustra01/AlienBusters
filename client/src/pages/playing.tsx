@@ -53,7 +53,7 @@ export default function Playing() {
     React.useEffect(()=>{
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
-                if (ev.data.indexOf('0') != 0) {
+                if (ev.data.indexOf('{') === 0) {
                     console.log(ev.data)
                     setUuid(ev.data)
                 }
@@ -64,25 +64,6 @@ export default function Playing() {
 
     const sendSocket = () => {
         socketRef.current?.send(sendMessage)
-    }
-
-    const detRenderer = (prog: number) => {
-        var prog5sec: number = Math.floor(prog/50)
-        switch (prog5sec) {
-            case(0): return <div>Loading...</div>
-            case(1): return <div>Question1</div>
-            case(2): return <div>Question2</div>
-            case(3): return <div>Question3</div>
-            case(4): return <div>Question4</div>
-            case(5): return <div>Question5</div>
-            case(6): return <div>Question6</div>
-            case(7): return <div>Question7</div>
-            case(8): return <div>Question8</div>
-            case(9): return <div>Question9</div>
-            case(10): return <div>Question10</div>
-            case(11): return <div>Result</div>
-            default: return <div>Error!</div>
-        }
     }
 
     return (
@@ -109,6 +90,25 @@ export default function Playing() {
 
     );
 
+}
+
+const detRenderer = (prog: number) => {
+    var prog5sec: number = Math.floor(prog/50)
+    switch (prog5sec) {
+        case(0): return <div>Loading...</div>
+        case(1): return <div>Question1</div>
+        case(2): return <div>Question2</div>
+        case(3): return <div>Question3</div>
+        case(4): return <div>Question4</div>
+        case(5): return <div>Question5</div>
+        case(6): return <div>Question6</div>
+        case(7): return <div>Question7</div>
+        case(8): return <div>Question8</div>
+        case(9): return <div>Question9</div>
+        case(10): return <div>Question10</div>
+        case(11): return <div>Result</div>
+        default: return <div>Error!</div>
+    }
 }
 
 const useWindowSize = (): number[] => {
