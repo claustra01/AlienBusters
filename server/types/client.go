@@ -3,7 +3,6 @@ package types
 import (
 	"encoding/json"
 	"log"
-	"strconv"
 	"time"
 
 	"github.com/fasthttp/websocket"
@@ -76,8 +75,14 @@ func (c *Client) readPump() {
 		if err := json.Unmarshal(message, &dat); err != nil {
 			log.Printf("error: %v", err)
 		}
-		log.Printf(strconv.Itoa(dat.Room))
-		data, _ := json.Marshal(&dat)
+		// data, _ := json.Marshal(&dat)
+		// c.room.broadcast <- []byte(data)
+		c.room.senddata.Room = 1
+		pos := Pointer{PointerX: dat.Pos.PointerX, PointerY: dat.Pos.PointerY}
+		c.room.senddata.Pos[c.id] = pos
+		c.room.senddata.Score[c.id] = dat.Score
+		GenerateQ(c.room.senddata.Question)
+		data, _ := json.Marshal(&c.room.senddata)
 		c.room.broadcast <- []byte(data)
 	}
 }
@@ -137,6 +142,7 @@ func (room *Room) ServeWs(ctx *fiber.Ctx) error {
 		client.room.register <- client
 		log.Println("tets")
 		log.Printf("uuid: %v", u.String())
+
 		go client.writePump()
 		client.readPump()
 	})
