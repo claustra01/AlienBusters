@@ -14,6 +14,9 @@
     margin:auto;
     border: 2px solid rgb(255, 255, 255);
 
+    background-color:white;
+    opacity: 0.6;
+
 }
 .scorebox{
     width:30vw;
@@ -31,7 +34,8 @@
     height:100vh;
     margin-left:30vw;
     border: 2px solid rgb(255, 255, 255);
-    background-image: url("./space.png");
+    background-image: url("../public/space.png"); 
+    box-shadow:50px 50px 200px 100px rgb(0, 0, 0) inset;
 }
 
 .cardbox1{

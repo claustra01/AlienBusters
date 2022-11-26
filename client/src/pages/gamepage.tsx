@@ -16,6 +16,7 @@ export default function Gamepage() {
                <div className = "scorebox"></div>
               </div>
               <div className = "displaybox">
+                
                <div className = "cardbox1"></div>
                <div className = "cardbox2"></div>
                <div className = "cardbox3"></div>
