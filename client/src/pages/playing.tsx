@@ -1,34 +1,75 @@
 import React from 'react';
+import Link from 'next/link'
 
-export default function App() {
-    const mousePosition = useMousePosition();
-  
+import CustomHead from '../components/customhead'
+
+export default function Playing() {
+
+    const [screenWidth, screenHeight] = useWindowSize();
+    const [clientX, clientY] = [useMousePosition()[0]/screenWidth, useMousePosition()[1]/screenHeight];
+
     return (
-      <p>
-        Your cursor position:
-        <br />
-        {JSON.stringify(mousePosition)}
-      </p>
+        
+        <div className='{styles.container}'>
+            
+        <CustomHead/>
+
+            <main className='{styles.main}'>
+
+                    <Link href="/">
+                        <p>TopPage</p>
+                    </Link><br/>
+
+                    <p>
+                        {`${screenWidth}x${screenHeight}`}
+                        <br/>
+                        {`${clientX}x${clientY}`}
+                    </p>
+
+            </main>
+        </div>
+    
     );
-  }
-  
-  const useMousePosition = () => {
+
+}
+
+const useWindowSize = (): number[] => {
     const [
-      mousePosition,
-      setMousePosition
-    ] = React.useState({ x: null, y: null });
-  
-    React.useEffect(() => {
-      const updateMousePosition = (ev: { clientX: any; clientY: any; }) => {
-        setMousePosition({ x: ev.clientX, y: ev.clientY });
-      };
-      
-      window.addEventListener('mousemove', updateMousePosition);
-  
-      return () => {
-        window.removeEventListener('mousemove', updateMousePosition);
-      };
+        size,
+        setSize
+    ] = React.useState([0, 0]);
+
+    React.useLayoutEffect(() => {
+
+        const updateSize = (): void => {
+            setSize([window.innerWidth, window.innerHeight]);
+        };
+
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+
     }, []);
-  
+
+    return size;
+};
+
+const useMousePosition = () => {
+    const [
+        mousePosition,
+        setMousePosition
+    ] = React.useState([0, 0]);
+
+    React.useEffect(() => {
+
+        const updateMousePosition = (event: { clientX: any; clientY: any; }) => {
+            setMousePosition([event.clientX, event.clientY]);
+        };
+
+        window.addEventListener('mousemove', updateMousePosition);
+        return () => window.removeEventListener('mousemove', updateMousePosition);
+        
+    }, []);
+
     return mousePosition;
-  };
+};
