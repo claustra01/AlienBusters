@@ -33,34 +33,56 @@ export default function Playing() {
             console.log('Connected')
         }
         
+        
+        
         socketRef.current.onclose = function () {
             console.log('closed')
             setIsConnected(false)
         }
-
+        
+        // if(socketRef.current){
+        //     socketRef.current.onmessage = function (ev) {
+        //         console.log(ev.data)
+        //         setUUID(ev.data)
+        //     }
+        // }
     }, [])
 
     React.useEffect(()=>{
+        const id = setInterval(() => {
+
+            setSendMessage(sendJson)
+            sendSocket()
+        
+            setProgress(progress+1)
+    
+        }, 100);
+
+        if(socketRef.current){
+            socketRef.current.onmessage = function (ev) {
+                // console.log(ev.data)
+                if (UUID !== '')
+                    setMessage(ev.data)
+                else 
+                    setUUID(ev.data)
+            }
+        }
+        return () => {
+            clearInterval(id);
+          }
+    },[socketRef.current?.send])
+
+    const sendSocket = () => {
+        socketRef.current?.send(sendMessage)
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
                 console.log(ev.data)
                 setMessage(ev.data)
             }
         }
-    },[socketRef.current?.onmessage])
-
-    const sendSocket = () => {
-        socketRef.current?.send(sendMessage)
     }
    
-    setTimeout(() => {
 
-        setSendMessage(sendJson)
-        sendSocket()
-    
-        setProgress(progress+1)
-
-    }, 100);
 
     return (
         
