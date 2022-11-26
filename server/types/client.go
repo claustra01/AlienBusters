@@ -1,7 +1,9 @@
 package types
 
 import (
+	"encoding/json"
 	"log"
+	"strconv"
 	"time"
 
 	"github.com/fasthttp/websocket"
@@ -20,7 +22,7 @@ const (
 	pingPeriod = (pongWait * 9) / 10
 
 	// Maximum message size allowed from peer.
-	maxMessageSize = 512
+	maxMessageSize = 1024
 )
 
 // var (
@@ -52,11 +54,13 @@ func (c *Client) readPump() {
 		c.room.unregister <- c
 		c.conn.Close()
 	}()
+	// var v V
 	c.conn.SetReadLimit(maxMessageSize)
 	c.conn.SetReadDeadline(time.Now().Add(pongWait))
 	c.conn.SetPongHandler(func(string) error { c.conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		_, message, err := c.conn.ReadMessage()
+		// err := c.conn.ReadJSON(v)
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
@@ -64,8 +68,13 @@ func (c *Client) readPump() {
 			break
 		}
 		// message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
+		dat := MouthPost{}
 
-		c.room.broadcast <- message
+		if err := json.Unmarshal(message, &dat); err != nil {
+			log.Printf("error: %v", err)
+		}
+		log.Printf(strconv.Itoa(dat.Room))
+		c.room.broadcast <- []byte(strconv.Itoa(dat.Room))
 	}
 }
 
