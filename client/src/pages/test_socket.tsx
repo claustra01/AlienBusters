@@ -66,7 +66,8 @@ export default function Test() {
         <div>
 
           <h1>WebSocket is connected : {`${isConnected}`}</h1>
-          <button onClick={test}>test</button>
+
+          <div className="buttun"><button onClick={test}>test</button></div>
           <input onChange={(e)=>{setSendMessage(e.target.value)}}>
           </input>
           <div>

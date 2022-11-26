@@ -4,21 +4,22 @@ import Link from 'next/link'
 import styles from '../../styles/home.module.css'
 // import ghost from '../../styles/index.module.css'
 // import '../../styles/ghost.css'
+//import '../../styles/index.css'
 
 export default function Home() {
     return (
 
-        <div className='{styles.container} hogebody'>
+        <div className={styles.hogebody}>
 
             <Head>
                 <title>Kizukuと愉快な仲間たち</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head> 
 
-            <main className='{styles.main}'>
+            <main className={styles.main}>
 
-                <div className="title">Alien Busters
-                    <div className="subtitle">Let's Play Game! → 
+                <div className={styles.title}>Alien Busters
+                    <div className='{styles.subtitle}'>Let's Play Game! → 
 
                         <Link href="/rooms">
                             <p className='roomlist'>RoomList</p>
