@@ -53,7 +53,7 @@ export default function Playing() {
     React.useEffect(()=>{
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
-                if (ev.data.indexOf('{') === 0) {
+                if (!(ev.data.indexOf('{') === 0)) {
                     console.log(ev.data)
                     setUuid(ev.data)
                 }

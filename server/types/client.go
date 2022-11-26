@@ -77,7 +77,8 @@ func (c *Client) readPump() {
 			log.Printf("error: %v", err)
 		}
 		log.Printf(strconv.Itoa(dat.Room))
-		c.room.broadcast <- []byte(strconv.Itoa(dat.Room))
+		data, _ := json.Marshal(&dat)
+		c.room.broadcast <- []byte(data)
 	}
 }
 
@@ -107,6 +108,7 @@ func (c *Client) writePump() {
 			if err != nil {
 				return
 			}
+			// c.conn.WriteJSON()
 			w.Write(message)
 
 			// Add queued chat messages to the current websocket message.
