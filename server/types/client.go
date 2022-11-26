@@ -81,7 +81,8 @@ func (c *Client) readPump() {
 		pos := Pointer{PointerX: dat.Pos.PointerX, PointerY: dat.Pos.PointerY}
 		c.room.senddata.Pos[c.id] = pos
 		c.room.senddata.Score[c.id] = dat.Score
-		GenerateQ(c.room.senddata.Question)
+		// GenerateQ(c.room.question["test"])
+		c.room.senddata.Question = c.room.question["test"]
 		data, _ := json.Marshal(&c.room.senddata)
 		c.room.broadcast <- []byte(data)
 	}

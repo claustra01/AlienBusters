@@ -30,7 +30,7 @@ func NewRoom() *Room {
 }
 
 func (r *Room) Run() {
-	GenerateQ(r.question["test"])
+	r.question["test"] = GenerateQ()
 	for {
 		select {
 		case client := <-r.register:
