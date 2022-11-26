@@ -1,22 +1,20 @@
-import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../../styles/rooms.module.css'
 
+import CustomHead from '../components/customhead'
 
-export default function Home() {
+export default function Rooms() {
+
     return (
 
         <div className='{styles.container}'>
-
-            <Head>
-                <title>Kizukuと愉快な仲間たち</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head> 
+            
+            <CustomHead/>
 
             <main className='{styles.main}'>
 
-                <div><div className="titlebox">Ailan busters</div>
+                <div><div className="titlebox"><a>Ailan busters</a></div>
                     <div className = "subbox">
 
                         <Link href="/">
@@ -30,7 +28,6 @@ export default function Home() {
                         <Link href="/test_socket">
                             <p>SocketTest</p>
                         </Link>
-
                         <div className="bird"></div>
                         <div className="bird -type_2"></div>
                         <div className="bird -type_3"></div>
@@ -38,7 +35,6 @@ export default function Home() {
                     </div>
                 </div>
 
-                
 
             </main>
         </div>
