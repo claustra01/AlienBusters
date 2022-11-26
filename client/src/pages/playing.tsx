@@ -13,10 +13,12 @@ export default function Playing() {
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
 
+    const [clock, setClock] = React.useState(false)
     const [uuid, setUuid] = React.useState('')
     const [score, setScore] = React.useState(0)
     const [progress, setProgress] = React.useState(0)
-    const sendJson = createJson(uuid, score)
+    const [mousePos, setMousePos] = React.useState([0, 0])
+    const [windowSize, setWindowSize] = React.useState([0, 0])
 
     React.useEffect(() => {
         
@@ -24,33 +26,54 @@ export default function Playing() {
         socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
         // デプロイ先のバックエンドを動かす用
         // socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
-        
 
+        // 接続時のソケット処理
         console.log(socketRef)
         socketRef.current.onopen = function () {
             setIsConnected(true)
             console.log('Connected')
         }
         
+        // 切断時のソケット処理
         socketRef.current.onclose = function () {
             console.log('closed')
             localStorage.removeItem('uuid')
             setIsConnected(false)
         }
 
-        const id = setInterval(() => {
-            setSendMessage(sendJson)
-            sendSocket()
-            setProgress((e)=>e+1)
-        }, 100);
+        // マウス座標取得
+        const updateMousePosition = (event: { clientX: any; clientY: any; }) => {
+            setMousePos([event.clientX, event.clientY]);
+        };
+        window.addEventListener('mousemove', updateMousePosition);
 
+        // タイマー設定
+        const id = setInterval(() => {
+            setClock(true)
+        }, 50);
         return () => {
             clearInterval(id);
         }
         
     }, [])
 
-    React.useEffect(()=>{
+    // 常時実行すること
+    React.useEffect(() => {
+
+        setSendMessage(createJson(uuid, windowSize, mousePos, score))
+        sendSocket()
+        setProgress(progress+1)
+
+        if (message.indexOf('{') === 0) {
+            const json = JSON.parse(message)
+            console.log(json.room)
+        }
+
+        setClock(false)
+    }, [clock])
+
+    // ソケット受信, UUID取得
+    React.useEffect(() => {
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
                 if (!(ev.data.indexOf('{') === 0)) {
@@ -62,8 +85,19 @@ export default function Playing() {
         }
     }, [socketRef.current])
 
+    // ウィンドウサイズ取得
+    React.useLayoutEffect(() => {
+        const updateSize = (): void => {
+            setWindowSize([window.innerWidth, window.innerHeight]);
+        };
+        window.addEventListener('resize', updateSize);
+        updateSize();
+    }, []);
+
+    // ソケット送信
     const sendSocket = () => {
-        socketRef.current?.send(sendMessage)
+        if (socketRef.current?.readyState === 1)
+            socketRef.current?.send(sendMessage)
     }
 
     return (
@@ -74,16 +108,16 @@ export default function Playing() {
 
             <main className='{styles.main}'>
 
-                    <Link href="/">
-                        <p>TopPage</p>
-                    </Link><br/>
+                <Link href="/">
+                    <p>TopPage</p>
+                </Link><br/>
 
-                    <p>WebSocket is connected : {`${isConnected}`}</p>
-                    
-                    {detRenderer(progress)}
-                    
-                    <p>{uuid}</p>
-                    <p>{message}</p>
+                <p>WebSocket is connected : {`${isConnected}`}</p>
+                
+                {detRenderer(progress)}
+                
+                <p>{uuid}</p>
+                <p>{message}</p>
 
             </main>
         </div>
@@ -111,27 +145,6 @@ const detRenderer = (prog: number) => {
     }
 }
 
-const useWindowSize = (): number[] => {
-    const [
-        size,
-        setSize
-    ] = React.useState([0, 0]);
-
-    React.useLayoutEffect(() => {
-
-        const updateSize = (): void => {
-            setSize([window.innerWidth, window.innerHeight]);
-        };
-
-        window.addEventListener('resize', updateSize);
-        updateSize();
-        return () => window.removeEventListener('resize', updateSize);
-
-    }, []);
-
-    return size;
-};
-
 const useMousePosition = () => {
     const [
         mousePosition,
@@ -152,21 +165,16 @@ const useMousePosition = () => {
     return mousePosition;
 };
 
-const createJson = (clientUUID: string, clientScore: number) => {
-
-    const [clientX, clientY] = [
-        useMousePosition()[0]/useWindowSize()[0],
-        useMousePosition()[1]/useWindowSize()[1]
-    ];
+const createJson = (uuid: string, windowSize: number[], mousePos: number[], score: number) => {
 
     var obj = {
-        name: clientUUID,
+        name: uuid,
         room: 0,
         pos: {
-            x: clientX,
-            y: clientY
+            x: mousePos[0]/windowSize[0],
+            y: mousePos[1]/windowSize[1]
         },
-        score: clientScore
+        score: score
     }
 
     return JSON.stringify(obj);
