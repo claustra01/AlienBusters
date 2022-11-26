@@ -1,18 +1,16 @@
-import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../../styles/rooms.module.css'
 
+import CustomHead from '../components/customhead'
 
-export default function Home() {
+export default function Rooms() {
+
     return (
 
         <div className='{styles.container}'>
-
-            <Head>
-                <title>Kizukuと愉快な仲間たち</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head> 
+            
+            <CustomHead/>
 
             <main className='{styles.main}'>
 
@@ -33,6 +31,7 @@ export default function Home() {
 
                     </div>
                 </div>
+
 
                 <img src="./ailian-min.png" className = "sample"></img>
 
