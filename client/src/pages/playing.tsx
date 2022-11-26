@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../../styles/playing.module.css'
@@ -13,10 +13,14 @@ export default function Playing() {
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
 
+    
+
     const [uuid, setUuid] = React.useState('')
     const [score, setScore] = React.useState(0)
     const [progress, setProgress] = React.useState(0)
-    const sendJson = createJson(uuid, score)
+
+    const [windowSize, setWindowSize] = React.useState([0, 0])
+    const [mousePos, setMousePos] = React.useState([0, 0])
 
     React.useEffect(() => {
         
@@ -38,8 +42,14 @@ export default function Playing() {
             setIsConnected(false)
         }
 
-        const id = setInterval(() => {
-            setSendMessage(sendJson)
+        const updateMousePosition = (event: { clientX: any; clientY: any; }) => {
+            setMousePos([event.clientX, event.clientY]);
+        };
+        window.addEventListener('mousemove', updateMousePosition);
+        
+        const id = setInterval(() => {      
+            setSendMessage(()=>createJson(uuid, windowSize, mousePos, score))
+            console.log(sendMessage)
             sendSocket()
             setProgress((e)=>e+1)
         }, 100);
@@ -61,6 +71,15 @@ export default function Playing() {
             }
         }
     }, [socketRef.current])
+
+    React.useLayoutEffect(() => {
+        const updateSize = (): void => {
+            setWindowSize([window.innerWidth, window.innerHeight]);
+        };
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
 
     const sendSocket = () => {
         socketRef.current?.send(sendMessage)
@@ -110,7 +129,7 @@ const detRenderer = (prog: number) => {
         default: return <div>Error!</div>
     }
 }
-
+/*
 const useWindowSize = (): number[] => {
     const [
         size,
@@ -151,20 +170,15 @@ const useMousePosition = () => {
 
     return mousePosition;
 };
-
-const createJson = (clientUUID: string, clientScore: number) => {
-
-    const [clientX, clientY] = [
-        useMousePosition()[0]/useWindowSize()[0],
-        useMousePosition()[1]/useWindowSize()[1]
-    ];
+*/
+const createJson = (clientUUID: string, clientSize: number[], clientPos: number[], clientScore: number) => {
 
     var obj = {
         name: clientUUID,
         room: 0,
         pos: {
-            x: clientX,
-            y: clientY
+            x: clientPos[0]/clientSize[0],
+            y: clientPos[1]/clientSize[1]
         },
         score: clientScore
     }
