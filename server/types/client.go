@@ -50,6 +50,8 @@ type Client struct {
 	send chan []byte
 
 	id string
+
+	RoomId string
 }
 
 func (c *Client) readPump() {
@@ -128,10 +130,11 @@ func (c *Client) writePump() {
 	}
 }
 
-func (room *Room) ServeWs(ctx *fiber.Ctx) error {
-	err := upgrader.Upgrade(ctx.Context(), func(conn *websocket.Conn) {
+func (room *Room) ServeWs(c *fiber.Ctx) error {
+	err := upgrader.Upgrade(c.Context(), func(conn *websocket.Conn) {
 		u, _ := uuid.NewRandom()
-		client := &Client{room: room, conn: conn, send: make(chan []byte, 512), id: u.String()}
+
+		client := &Client{room: room, conn: conn, send: make(chan []byte, 512), id: u.String(), RoomId: c.Query("room")}
 		client.room.register <- client
 		log.Println("tets")
 		log.Printf("uuid: %v", u.String())

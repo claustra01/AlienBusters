@@ -12,6 +12,8 @@ type Room struct {
 
 	// Unregister requests from clients.
 	unregister chan *Client
+
+	RoomId map[string]int
 }
 
 func NewRoom() *Room {
@@ -20,6 +22,7 @@ func NewRoom() *Room {
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
 		clients:    make(map[*Client]bool),
+		RoomId:     make(map[string]int),
 	}
 }
 
@@ -28,8 +31,14 @@ func (r *Room) Run() {
 		select {
 		case client := <-r.register:
 			r.clients[client] = true
+			// u, _ := uuid.NewRandom()
+			// r.RoomId[u.String()] = 1
+			// client.RoomId = u.String()
 		case client := <-r.unregister:
 			if _, ok := r.clients[client]; ok {
+				if n := r.RoomId[client.RoomId] - 1; n < 1 {
+					delete(r.RoomId, client.RoomId)
+				}
 				delete(r.clients, client)
 				close(client.send)
 			}

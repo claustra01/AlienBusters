@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import type { NextPage } from 'next'
 import { useRef, useEffect, useState } from 'react'
+import axios from 'axios'
 
 // テスト用ページ（いずれ削除してください）
 
@@ -14,7 +15,20 @@ export default function Test() {
     
     useEffect(() => {
       // Dockerでバックエンドを動かす時用
-      socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
+      const getUuid = async() =>{
+        const t = await axios.get('https://localhost:8080/')
+        return t
+      }
+      try{
+
+          const z = getUuid()
+          console.log(z)
+          socketRef.current = new WebSocket(`ws://localhost:8080/ws/123?room=1`)
+      }catch(err){
+        console.error(err)
+        socketRef.current = new WebSocket(`ws://localhost:8080/ws/`)
+
+      }
 
       // デプロイ先のバックエンドを動かすよう
       // socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
