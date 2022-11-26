@@ -8,6 +8,7 @@ import (
 
 	"github.com/fasthttp/websocket"
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/valyala/fasthttp"
 )
 
@@ -47,6 +48,8 @@ type Client struct {
 
 	// Buffered channel of outbound messages.
 	send chan []byte
+
+	id string
 }
 
 func (c *Client) readPump() {
@@ -89,6 +92,7 @@ func (c *Client) writePump() {
 		ticker.Stop()
 		c.conn.Close()
 	}()
+	c.conn.WriteMessage(websocket.TextMessage, []byte(c.id))
 	for {
 		select {
 		case message, ok := <-c.send:
@@ -126,9 +130,11 @@ func (c *Client) writePump() {
 
 func (room *Room) ServeWs(ctx *fiber.Ctx) error {
 	err := upgrader.Upgrade(ctx.Context(), func(conn *websocket.Conn) {
-		client := &Client{room: room, conn: conn, send: make(chan []byte, 256)}
+		u, _ := uuid.NewRandom()
+		client := &Client{room: room, conn: conn, send: make(chan []byte, 512), id: u.String()}
 		client.room.register <- client
 		log.Println("tets")
+		log.Printf("uuid: %v", u.String())
 		go client.writePump()
 		client.readPump()
 	})
