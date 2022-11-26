@@ -28,9 +28,9 @@ export default function Playing() {
     React.useEffect(() => {
         
         // Dockerでバックエンドを動かす時用
-        socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
+        // socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
         // デプロイ先のバックエンドを動かす用
-        // socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
+        socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
 
         // 接続時のソケット処理
         console.log(socketRef)
