@@ -6,8 +6,6 @@ import styles from '../../styles/playing.module.css'
 import CustomHead from '../components/customhead'
 import { send } from 'process';
 
-var clientUUID: string;
-
 export default function Playing() {
 
     const socketRef = React.useRef<WebSocket>()
@@ -15,10 +13,10 @@ export default function Playing() {
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
 
-    const [UUID, setUUID] = React.useState('')
+    const [uuid, setUuid] = React.useState('')
     const [score, setScore] = React.useState(0)
     const [progress, setProgress] = React.useState(0)
-    const sendJson = createJson(score)
+    const sendJson = createJson(uuid, score)
 
     React.useEffect(() => {
         
@@ -26,6 +24,7 @@ export default function Playing() {
         socketRef.current = new WebSocket('ws://localhost:8080/ws/123?v=1.0')
         // デプロイ先のバックエンドを動かす用
         // socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
+        
 
         console.log(socketRef)
         socketRef.current.onopen = function () {
@@ -33,56 +32,58 @@ export default function Playing() {
             console.log('Connected')
         }
         
-        
-        
         socketRef.current.onclose = function () {
             console.log('closed')
+            localStorage.removeItem('uuid')
             setIsConnected(false)
         }
+
+        const id = setInterval(() => {
+            setSendMessage(sendJson)
+            sendSocket()
+            setProgress((e)=>e+1)
+        }, 100);
+
+        return () => {
+            clearInterval(id);
+        }
         
-        // if(socketRef.current){
-        //     socketRef.current.onmessage = function (ev) {
-        //         console.log(ev.data)
-        //         setUUID(ev.data)
-        //     }
-        // }
     }, [])
 
     React.useEffect(()=>{
-        const id = setInterval(() => {
-
-            setSendMessage(sendJson)
-            sendSocket()
-        
-            setProgress(progress+1)
-    
-        }, 100);
-
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
-                // console.log(ev.data)
-                if (UUID !== '')
-                    setMessage(ev.data)
-                else 
-                    setUUID(ev.data)
-            }
-        }
-        return () => {
-            clearInterval(id);
-          }
-    },[socketRef.current?.send])
-
-    const sendSocket = () => {
-        socketRef.current?.send(sendMessage)
-        if(socketRef.current){
-            socketRef.current.onmessage = function (ev) {
-                console.log(ev.data)
+                if (ev.data.indexOf('0') != 0) {
+                    console.log(ev.data)
+                    setUuid(ev.data)
+                }
                 setMessage(ev.data)
             }
         }
-    }
-   
+    }, [socketRef.current])
 
+    const sendSocket = () => {
+        socketRef.current?.send(sendMessage)
+    }
+
+    const detRenderer = (prog: number) => {
+        var prog5sec: number = Math.floor(prog/50)
+        switch (prog5sec) {
+            case(0): return <div>Loading...</div>
+            case(1): return <div>Question1</div>
+            case(2): return <div>Question2</div>
+            case(3): return <div>Question3</div>
+            case(4): return <div>Question4</div>
+            case(5): return <div>Question5</div>
+            case(6): return <div>Question6</div>
+            case(7): return <div>Question7</div>
+            case(8): return <div>Question8</div>
+            case(9): return <div>Question9</div>
+            case(10): return <div>Question10</div>
+            case(11): return <div>Result</div>
+            default: return <div>Error!</div>
+        }
+    }
 
     return (
         
@@ -97,8 +98,10 @@ export default function Playing() {
                     </Link><br/>
 
                     <p>WebSocket is connected : {`${isConnected}`}</p>
-
-                    <p>{UUID}</p>
+                    
+                    {detRenderer(progress)}
+                    
+                    <p>{uuid}</p>
                     <p>{message}</p>
 
             </main>
@@ -149,7 +152,7 @@ const useMousePosition = () => {
     return mousePosition;
 };
 
-const createJson = (clientScore: number) => {
+const createJson = (clientUUID: string, clientScore: number) => {
 
     const [clientX, clientY] = [
         useMousePosition()[0]/useWindowSize()[0],
@@ -157,10 +160,8 @@ const createJson = (clientScore: number) => {
     ];
 
     var obj = {
-        mouse: true,
-        response: false,
-        room: 0,
         name: clientUUID,
+        room: 0,
         pos: {
             x: clientX,
             y: clientY

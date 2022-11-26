@@ -1,19 +1,28 @@
 
 
 button{
-    top:5vmin;
-    width: 50px;
-    height:30px;
+    top:25vmin;
+    width: 70px;
+    height:40px;
     color:white;
     border: 1px solid rgb(255, 255, 255);
     font-family: 'Creepster', cursive;
+    text-shadow: 0 0 1px #ffffff,
+    0 0 2px #ffffff,
+    0 0 3px #ab0b2b,
+    0 0 4px #7c0911,
+    0 0 5px #8b090c,
+    0 0 10px #bb6407,
+    0 0 20px #f68e71;
+    font-size: 20px;
+    color: #ffffff;
   
 }
 
 
 
 .inbox{
-    top:10vmin;
+    top:20vmin;
     width: 100px;
     height:50px;
     color:white;
@@ -24,9 +33,18 @@ button{
 .flagment{
     width: 100px;
     height:100px;
-    top:0vmin;
+    top:5vmin;
     color:white;
     font-family: 'Creepster', cursive;
+    text-shadow: 0 0 1px #ffffff,
+    0 0 2px #ffffff,
+    0 0 3px #ab0b2b,
+    0 0 4px #7c0911,
+    0 0 5px #8b090c,
+    0 0 10px #bb6407,
+    0 0 20px #f68e71;
+    font-size: 20px;
+    color: #ffffff;
    
    
 }
