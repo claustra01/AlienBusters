@@ -7,8 +7,6 @@ import CustomHead from '../components/customhead'
 import { send } from 'process';
 
 var clientUUID: string;
-const score: number = 0;
-const prog: number = 0;
 
 export default function Playing() {
 
@@ -17,6 +15,9 @@ export default function Playing() {
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
 
+    const [UUID, setUUID] = React.useState('')
+    const [score, setScore] = React.useState(0)
+    const [progress, setProgress] = React.useState(0)
     const sendJson = createJson(score)
 
     React.useEffect(() => {
@@ -30,6 +31,12 @@ export default function Playing() {
         socketRef.current.onopen = function () {
             setIsConnected(true)
             console.log('Connected')
+        }
+        
+        if(socketRef.current){
+            socketRef.current.onmessage = function (ev) {
+                setUUID(ev.data)
+            }
         }
         
         socketRef.current.onclose = function () {
@@ -72,15 +79,12 @@ export default function Playing() {
 
             <main className='{styles.main}'>
 
-                    <p>WebSocket is connected : {`${isConnected}`}</p>
-
                     <Link href="/">
                         <p>TopPage</p>
                     </Link><br/>
 
-                    <div>{message}</div>
-
-                    <img src="/minecraft.png" />;
+                    <p>WebSocket is connected : {`${isConnected}`}</p>
+                    <p>{UUID}</p>
 
             </main>
         </div>
