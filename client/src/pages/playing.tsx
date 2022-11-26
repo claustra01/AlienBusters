@@ -33,34 +33,12 @@ export default function Playing() {
             console.log('Connected')
         }
         
-        if(socketRef.current){
-            socketRef.current.onmessage = function (ev) {
-                setUUID(ev.data)
-            }
-        }
-        
         socketRef.current.onclose = function () {
             console.log('closed')
             setIsConnected(false)
         }
 
     }, [])
-   
-    setTimeout(() => {
-        setSendMessage(sendJson)
-        sendSocket()
-    }, 100);
-
-    const sendSocket = () => {
-        socketRef.current?.send(sendMessage)
-    }
-
-    if(socketRef.current){
-        socketRef.current.onmessage = function (ev) {
-            console.log(ev.data)
-            setMessage(ev.data)
-        }
-    }
 
     React.useEffect(()=>{
         if(socketRef.current){
@@ -70,6 +48,19 @@ export default function Playing() {
             }
         }
     },[socketRef.current?.onmessage])
+
+    const sendSocket = () => {
+        socketRef.current?.send(sendMessage)
+    }
+   
+    setTimeout(() => {
+
+        setSendMessage(sendJson)
+        sendSocket()
+    
+        setProgress(progress+1)
+
+    }, 100);
 
     return (
         
@@ -84,7 +75,9 @@ export default function Playing() {
                     </Link><br/>
 
                     <p>WebSocket is connected : {`${isConnected}`}</p>
+
                     <p>{UUID}</p>
+                    <p>{message}</p>
 
             </main>
         </div>
