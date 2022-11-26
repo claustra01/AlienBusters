@@ -1,4 +1,4 @@
-module github.com/sny430/hajimete_hackathon_2022
+module github.com/claustra01/hajimete_hackathon_2022
 
 go 1.19
 
