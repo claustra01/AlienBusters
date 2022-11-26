@@ -42,7 +42,7 @@
     width:17vw;
     height:35vh;
     border: 1px solid rgb(255, 255, 255);
-    background-image: url("../public/1.png");
+    /* background-image: url("../public/1.png"); */
     top:10vh;
     margin-left:5vw;
     background-size: cover;
@@ -55,7 +55,7 @@
     width:17vw;
     height:35vh;
     border: 1px solid rgb(78, 58, 58);
-    background-image: url("../public/2.png");
+    /* background-image: url("../public/2.png"); */
     top:35vh;
     margin-left:25vw;
     background-size: cover;
@@ -65,7 +65,7 @@
 .cardbox3{
     width:17vw;
     height:35vh;
-    background-image: url("../public/3.png");
+    /* background-image: url("../public/3.png"); */
     border: 1px solid rgb(255, 255, 255);
 
     top:55vh;
@@ -75,7 +75,7 @@
 }
 
 .cardbox4{
-    background-image: url("../public/4.png");
+    /* background-image: url("../public/4.png"); */
     width:17vw;
     height:35vh;
     border: 1px solid rgb(255, 255, 255);
@@ -90,7 +90,7 @@
     width:17vw;
     height:35vh;
     border: 1px solid rgb(255, 255, 255);
-    background-image: url("../public/5.png");
+    /* background-image: url("../public/5.png"); */
     top:55vh;
     margin-left:50vw;
     background-size: cover;

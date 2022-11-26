@@ -17,11 +17,11 @@ export default function Gamepage() {
               </div>
               <div className = "displaybox">
                 
-               <div className = "cardbox1"></div>
-               <div className = "cardbox2"></div>
-               <div className = "cardbox3"></div>
-               <div className = "cardbox4"></div>
-               <div className = "cardbox5"></div>
+              <img src="/1.png" className = "cardbox1"/>
+               <img src="/2.png" className = "cardbox2"/>
+               <img src="/3.png" className = "cardbox3"/>
+               <img src="/4.png" className = "cardbox4"/>
+               <img src="/5.png" className = "cardbox5"/>
               </div>
            </ul>
           </div>
