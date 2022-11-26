@@ -16,7 +16,7 @@ export default function Home() {
 
             <main className='{styles.main}'>
 
-                <div><div className="titlebox"><a>Ailan busters</a></div>
+                <div><div className="titlebox">Ailan busters</div>
                     <div className = "subbox">
 
                         <Link href="/">
@@ -31,10 +31,14 @@ export default function Home() {
                             <p>SocketTest</p>
                         </Link>
 
+                        <div className="bird"></div>
+                        <div className="bird -type_2"></div>
+                        <div className="bird -type_3"></div>
+
                     </div>
                 </div>
 
-                <img src="./ailian-min.png" className = "sample"></img>
+                
 
             </main>
         </div>
