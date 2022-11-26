@@ -23,7 +23,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
+  
   perspective: 100vmin;
  
 
@@ -300,5 +300,7 @@ https://codepen.io/bullerb/pen/BzKzvK
   90% { transform: translateX(20%); }
   100% { transform: translateX(30%); }
 }
+
+/*  */
 
 /* ここまでおばけ------- */

@@ -5,6 +5,7 @@ import styles from '../../styles/home.module.css'
 // import ghost from '../../styles/index.module.css'
 // import '../../styles/ghost.css'
 
+
 export default function Home() {
     return (
 
@@ -17,12 +18,13 @@ export default function Home() {
 
             <main className='{styles.main}'>
 
-                <div className="title">ghost busters
+                <div className="title">Alien Busters
                     <div className="subtitle">Let's Play Game! → 
 
                         <Link href="/rooms">
                             <p className='roomlist'>RoomList</p>
                         </Link>
+                       
 
                         <div className="content">
 
@@ -44,6 +46,7 @@ export default function Home() {
                             </div>
 
                         </div>
+                            
                     </div>
                 </div>
 
