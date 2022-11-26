@@ -3,9 +3,10 @@ package main
 import (
 	"log"
 
+	"hajimete_hackathon_2022/types"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
-	"github.com/claustra01/hajimete_hackathon_2022/types"
 )
 
 func main() {
