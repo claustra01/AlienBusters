@@ -1,20 +1,9 @@
-// package main
-
-// import "github.com/gofiber/fiber/v2"
-
-// func main() {
-// 	app := fiber.New()
-
-// 	app.Get("/", func(c *fiber.Ctx) error {
-// 		return c.SendString("Hello, World!")
-// 	})
-
-//		app.Listen(":3000")
-//	}
 package main
 
 import (
 	"log"
+
+	"hajimete_hackathon_2022/types"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
@@ -22,6 +11,10 @@ import (
 
 func main() {
 	app := fiber.New()
+
+	room := types.NewRoom()
+
+	go room.Run()
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
@@ -37,33 +30,7 @@ func main() {
 		return fiber.ErrUpgradeRequired
 	})
 
-	app.Get("/ws/:id", websocket.New(func(c *websocket.Conn) {
-		// c.Locals is added to the *websocket.Conn
-		log.Println(c.Locals("allowed"))  // true
-		log.Println(c.Params("id"))       // 123
-		log.Println(c.Query("v"))         // 1.0
-		log.Println(c.Cookies("session")) // ""
-
-		// websocket.Conn bindings https://pkg.go.dev/github.com/fasthttp/websocket?tab=doc#pkg-index
-		var (
-			mt  int
-			msg []byte
-			err error
-		)
-		for {
-			if mt, msg, err = c.ReadMessage(); err != nil {
-				log.Println("read:", err)
-				break
-			}
-			log.Printf("recv: %s", msg)
-
-			if err = c.WriteMessage(mt, msg); err != nil {
-				log.Println("write:", err)
-				break
-			}
-		}
-
-	}))
+	app.Get("/ws/:id", room.ServeWs)
 
 	log.Fatal(app.Listen(":8080"))
 	// Access the websocket server: ws://localhost:3000/ws/123?v=1.0
