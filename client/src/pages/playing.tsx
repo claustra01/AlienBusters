@@ -112,8 +112,6 @@ export default function Playing() {
         }
         setClock(false)
 
-        console.log(clickedObj)
-
     }, [clock])
 
     // ソケット受信, UUID取得
@@ -132,7 +130,6 @@ export default function Playing() {
     // 答え合わせ
     React.useEffect(() => {
         var prog5sec: number = Math.floor(progress/200)
-        console.log('called')
         if (prog5sec > 0 && prog5sec <= 10) {
             var qNow = questions[prog5sec-1]
             var aNow = answers[qNow]
