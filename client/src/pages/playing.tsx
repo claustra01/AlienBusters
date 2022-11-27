@@ -268,7 +268,7 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
                 var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
                 var e = (
                     <div style={{position: 'absolute', top: y, left: x}}>
-                        <img src={'/hogefuga.png'} alt='mouse pointer' width='200px'/>
+                        <img src={'/hogefuga.png'} alt=' ' width='200px'/>
                     </div>
                 )
                 ret.push(e)
