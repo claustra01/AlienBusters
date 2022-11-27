@@ -1,5 +1,9 @@
 package types
 
+import (
+	"sync"
+)
+
 type Room struct {
 	// Registered clients.
 	clients map[*Client]bool
@@ -16,6 +20,8 @@ type Room struct {
 	question map[string][]int
 
 	senddata SendData
+
+	mu sync.Mutex
 }
 
 func NewRoom() *Room {
@@ -26,6 +32,7 @@ func NewRoom() *Room {
 		clients:    make(map[*Client]bool),
 		question:   map[string][]int{},
 		senddata:   *InitSendData(),
+		mu:         sync.Mutex{},
 	}
 }
 
