@@ -106,6 +106,8 @@ export default function Playing() {
         sendSocket()
         setProgress(progress+1)
 
+        if (progress%200 == 0) setClickedObj(-1)
+
         if (jsonFormatter(message).indexOf('{') === 0) {
             const json = JSON.parse(jsonFormatter(message))
             questions = json.question
@@ -135,7 +137,7 @@ export default function Playing() {
             var aNow = answers[qNow]
             var bonus = Math.floor((200-(progress%200)) / 50)
             if (clickedObj == aNow) setScore(score+(5+bonus))
-            else setScore(Math.max(0, score-(5+bonus)))
+            else if (clickedObj != -1) setScore(Math.max(0, score-(5+bonus)))
         }
     }, [clickedObj])
 
@@ -268,7 +270,7 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
         const json = JSON.parse(message)
         var ret = []
         for (let id in json.pos) {
-            if (id !== uuid) {
+            if (id === uuid) {
                 var x = (json.pos[id].x * windowSize[0]).toString() + 'px'
                 var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
                 var e = (
