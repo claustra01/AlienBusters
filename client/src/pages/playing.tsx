@@ -136,8 +136,9 @@ export default function Playing() {
         if (prog5sec > 0 && prog5sec <= 10) {
             var qNow = questions[prog5sec-1]
             var aNow = answers[qNow]
-            if (clickedObj == aNow) setScore(score+5)
-            else setScore(Math.max(0, score-5))
+            var bonus = 0
+            if (clickedObj == aNow) setScore(score+(5+bonus))
+            else setScore(Math.max(0, score-(5+bonus)))
         }
     }, [clickedObj])
 
@@ -172,7 +173,7 @@ export default function Playing() {
 const detRenderer = (prog: number, qList: number[]) => {
     var prog5sec: number = Math.floor(prog/200)
     switch (prog5sec) {
-        case(0): return <ResultPage/>
+        case(0): return <LoadingPage/>
         case(1): return getQuestion(qList[0])
         case(2): return getQuestion(qList[1])
         case(3): return getQuestion(qList[2])
@@ -274,7 +275,7 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
                 var x = (json.pos[id].x * windowSize[0]).toString() + 'px'
                 var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
                 var e = (
-                    <div style={{position: 'absolute', top: y, left: x, zIndex:1000}}>
+                    <div style={{position: 'absolute', top: y, left: x, zIndex:-1000}}>
                         <img src={'/hogefuga.png'} alt=' ' width='200px'/>
                     </div>
                 )
