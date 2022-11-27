@@ -71,7 +71,6 @@ export default function Playing() {
         setSendMessage(createJson(uuid, windowSize, mousePos, score))
         sendSocket()
         setProgress(progress+1)
-        setScore(score+1)
 
         if (jsonFormatter(message).indexOf('{') === 0) {
             const json = JSON.parse(jsonFormatter(message))
@@ -149,7 +148,7 @@ const renderTimer = (prog: number) => {
     }
     if (Math.floor(prog/200) > 0 && Math.floor(prog/200) <= 10)
         return (
-            <div className = "scorebox">                
+            <div className = "scorebox">
                 <div style={{top: '3%', left: '5%', fontSize: '160%', color: '#ffffff'}}>TIME</div>
                 <div style={{top: '10%', left: '5%', fontSize: '120%', color: '#ffffff'}}>{barString}</div>
                 <div style={{top: '15%', left: '5%', fontSize: '120%', color: '#ffffff'}}>{barString}</div>
@@ -161,15 +160,30 @@ const renderTimer = (prog: number) => {
 const renderScores = (message: string, uuid: string) => {
     if (message.indexOf('{') === 0) {
         const json = JSON.parse(message)
+        var ret = [], cnt = 0;
         for (let id in json.score) {
             if (id === uuid) {
-                var scoreData = json.score[id].toString() + 'px'
-                console.log(scoreData)
-                return (
-                    <div></div>
+                ret.push(
+                    <div style={{top: '30%', left: '5%', fontSize: '200%', color: '#ffffff'}}>
+                        YOU {json.score[id]}pt</div>
                 )
             }
         }
+        for (let id in json.score) {
+            cnt++;
+            var margin = cnt*10 + 30
+            if (id !== uuid) {
+                ret.push(
+                    <div style={{top: margin.toString()+'%', left: '5%', fontSize: '200%', color: '#ffffff'}}>
+                        Other {json.score[id]}pt</div>
+                )
+            }
+        }
+        return (
+            <div className = "scorebox">
+                {ret}
+            </div>
+        )
     }
 }
 
