@@ -112,7 +112,7 @@ export default function Playing() {
         
         <div>
             <CustomHead/>
-            {detRenderer(progress)}
+            {detRenderer(progress, questions)}
             {renderTimer(progress)}
             {renderScores(jsonFormatter(message), uuid)}
             {renderPointers(jsonFormatter(message), uuid, windowSize)}
@@ -122,21 +122,29 @@ export default function Playing() {
 
 }
 
-const detRenderer = (prog: number) => {
+const detRenderer = (prog: number, qList: number[]) => {
     var prog5sec: number = Math.floor(prog/200)
     switch (prog5sec) {
         case(0): return <LoadingPage/>
-        case(1): return <div>Question1</div>
-        case(2): return <GamePage/>
-        case(3): return <div>Question3</div>
-        case(4): return <GamePage/>
-        case(5): return <div>Question5</div>
-        case(6): return <GamePage/>
-        case(7): return <div>Question7</div>
-        case(8): return <GamePage/>
-        case(9): return <div>Question9</div>
-        case(10): return <GamePage/>
+        case(1): return getQuestion(qList[0])
+        case(2): return getQuestion(qList[1])
+        case(3): return getQuestion(qList[2])
+        case(4): return getQuestion(qList[3])
+        case(5): return getQuestion(qList[4])
+        case(6): return getQuestion(qList[5])
+        case(7): return getQuestion(qList[6])
+        case(8): return getQuestion(qList[7])
+        case(9): return getQuestion(qList[8])
+        case(10): return getQuestion(qList[9])
         case(11): return <div>Result</div>
+        default: return <ErrorPage/>
+    }
+}
+
+const getQuestion = (qId: number) => {
+    switch (qId%2) {
+        case(0): return <div>Question</div>
+        case(1): return <GamePage/>
         default: return <ErrorPage/>
     }
 }
