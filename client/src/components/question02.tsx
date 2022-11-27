@@ -20,7 +20,7 @@ export default function Gamepage() {
               </div>
               <div className = "displaybox">
                 
-                {/* ans=4 */}
+                {/* ans=2 */}
                <img src="/24.png" className = "cardbox1"/>
                <img src="/18.png" className = "cardbox2"/>
                <img src="/6.png" className = "cardbox3"/>
