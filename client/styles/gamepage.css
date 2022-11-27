@@ -7,17 +7,29 @@
     border: 6px solid rgb(255, 255, 255);
 }
 
+.titlename{
+
+    text-align:center;
+}
+
 .questionbox{
     width:30vw;
     height:40vh;
+    
    
     margin:auto;
     border: 2px solid rgb(255, 255, 255);
 
     background-color:white;
-    opacity: 0.6;
-
+   
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0.75;
+    
 }
+
+/*  */
+
 .scorebox{
     width:30vw;
     height:60vh;
@@ -54,7 +66,7 @@
 .cardbox2{
     width:17vw;
     height:35vh;
-    border: 1px solid rgb(78, 58, 58);
+    border: 1px solid rgb(255, 255, 255);
     /* background-image: url("../public/2.png"); */
     top:35vh;
     margin-left:25vw;
