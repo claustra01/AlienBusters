@@ -11,12 +11,14 @@ import CustomHead from '../components/customhead'
 import LoadingPage from '../components/loadingpage'
 import ErrorPage from '../components/errorpage'
 import GamePage from './gamepage'
+import { clickProp } from './_app';
 
 var questions: number[];
 
 export default function Playing() {
 
     const socketRef = React.useRef<WebSocket>()
+    const {clickedObj, setClickedObj} = React.useContext(clickProp)
     const [isConnected, setIsConnected] = React.useState(false)
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
@@ -78,6 +80,8 @@ export default function Playing() {
         }
 
         setClock(false)
+        console.log("クリックされたよ：",clickedObj)
+
     }, [clock])
 
     // ソケット受信, UUID取得
