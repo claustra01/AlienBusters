@@ -35,6 +35,7 @@ import Question22 from '../components/question22'
 import Question23 from '../components/question23'
 import Question24 from '../components/question24'
 import Question25 from '../components/question25'
+import { clickProp } from './_app';
 
 var questions: number[];
 const answers: number[] = [
@@ -48,6 +49,7 @@ const answers: number[] = [
 export default function Playing() {
 
     const socketRef = React.useRef<WebSocket>()
+    const {clickedObj, setClickedObj} = React.useContext(clickProp)
     const [isConnected, setIsConnected] = React.useState(false)
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
@@ -107,7 +109,6 @@ export default function Playing() {
             const json = JSON.parse(jsonFormatter(message))
             questions = json.question
         }
-
         setClock(false)
     }, [clock])
 
