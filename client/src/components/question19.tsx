@@ -16,18 +16,18 @@ export default function Gamepage() {
            <ul>
               <div>
               <div className="questionbox" >
-                <img src="/2.png" width="60%" style={{left:"20%"}}  alt="aaaa" />
+                <img src="/19.png" width="60%" style={{left:"20%"}}  alt="aaaa" />
               </div>
             
                <div className = "scorebox"></div>
               </div>
               <div className = "displaybox">
                 
-                {/* ans=2 */}
-               <img src="/24.png" className = "cardbox1" id="1" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
-               <img src="/18.png" className = "cardbox2" id="2" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
-               <img src="/6.png" className = "cardbox3" id="3" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
-               <img src="/2.png" className = "cardbox4" id="4" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
+                {/* ans=13*/}
+               <img src="/16.png" className = "cardbox1" id="1" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
+               <img src="/14.png" className = "cardbox2" id="2" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
+               <img src="/20.png" className = "cardbox3" id="3" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
+               <img src="/4.png" className = "cardbox4" id="4" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
                <img src="/13.png" className = "cardbox5" id="5" onClick={(e)=>{setClickedObj(e.currentTarget.id)}}/>
               </div>
            </ul>
@@ -45,9 +45,5 @@ export default function Gamepage() {
 
 
 }
-
-
-
-
 
 

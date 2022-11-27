@@ -9,6 +9,7 @@ import { json } from 'stream/consumers';
 
 import CustomHead from '../components/customhead'
 import LoadingPage from '../components/loadingpage'
+import ResultPage from '../components/resultpage'
 import ErrorPage from '../components/errorpage'
 import Question01 from '../components/question01'
 import Question02 from '../components/question02'
@@ -35,12 +36,21 @@ import Question22 from '../components/question22'
 import Question23 from '../components/question23'
 import Question24 from '../components/question24'
 import Question25 from '../components/question25'
+import { clickProp } from './_app';
 
 var questions: number[];
+const answers: number[] = [
+    1, 4, 2, 5, 4,
+    3, 1, 4, 2, 1,
+    5, 5, 3, 1, 3,
+    4, 2, 1, 5, 4,
+    3, 1, 2, 5, 2
+]
 
 export default function Playing() {
 
     const socketRef = React.useRef<WebSocket>()
+    const {clickedObj, setClickedObj} = React.useContext(clickProp)
     const [isConnected, setIsConnected] = React.useState(false)
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
@@ -96,12 +106,14 @@ export default function Playing() {
         sendSocket()
         setProgress(progress+1)
 
+        if (progress%200 == 0) setClickedObj(-1)
+
         if (jsonFormatter(message).indexOf('{') === 0) {
             const json = JSON.parse(jsonFormatter(message))
             questions = json.question
         }
-
         setClock(false)
+
     }, [clock])
 
     // ソケット受信, UUID取得
@@ -116,6 +128,18 @@ export default function Playing() {
             }
         }
     }, [socketRef.current])
+
+    // 答え合わせ
+    React.useEffect(() => {
+        var prog5sec: number = Math.floor(progress/200)
+        if (prog5sec > 0 && prog5sec <= 10) {
+            var qNow = questions[prog5sec-1]
+            var aNow = answers[qNow]
+            var bonus = Math.floor((200-(progress%200)) / 50)
+            if (clickedObj == aNow) setScore(score+(5+bonus))
+            else if (clickedObj != -1) setScore(Math.max(0, score-(5+bonus)))
+        }
+    }, [clickedObj])
 
     // ウィンドウサイズ取得
     React.useLayoutEffect(() => {
@@ -132,8 +156,8 @@ export default function Playing() {
             socketRef.current?.send(sendMessage)
     }
 
+    // ページ描画
     return (
-        
         <div>
             <CustomHead/>
             {detRenderer(progress, questions)}
@@ -141,7 +165,6 @@ export default function Playing() {
             {renderScores(jsonFormatter(message), uuid)}
             {renderPointers(jsonFormatter(message), uuid, windowSize)}
         </div>
-
     );
 
 }
@@ -160,13 +183,13 @@ const detRenderer = (prog: number, qList: number[]) => {
         case(8): return getQuestion(qList[7])
         case(9): return getQuestion(qList[8])
         case(10): return getQuestion(qList[9])
-        case(11): return <div>Result</div>
+        case(11): return <ResultPage/>
         default: return <ErrorPage/>
     }
 }
 
 const getQuestion = (qId: number) => {
-    switch (qId%2) {
+    switch (qId) {
         case(0): return <Question01/>
         case(1): return <Question02/>
         case(2): return <Question03/>
@@ -251,8 +274,8 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
                 var x = (json.pos[id].x * windowSize[0]).toString() + 'px'
                 var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
                 var e = (
-                    <div style={{position: 'absolute', top: y, left: x}}>
-                        <img src={'/pointer.png'} alt='mouse pointer' width='200px'/>
+                    <div style={{position: 'absolute', top: y, left: x, zIndex:-1000}}>
+                        <img src={'/hogefuga.png'} alt=' ' width='200px'/>
                     </div>
                 )
                 ret.push(e)
