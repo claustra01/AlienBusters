@@ -1,24 +1,28 @@
 package types
 
-type V interface {
-}
-
 type Pointer struct {
 	PointerX float64 `json:"x"`
 	PointerY float64 `json:"y"`
 }
 
-type MouthPost struct {
-	Mouth      bool    `json:"mouth"`
-	Response   bool    `json:"response"`
-	Room       int     `json:"room"`
-	PlayerName Pointer `json:"player_name"`
+type Post struct {
+	Room  int     `json:"room"`
+	UUID  string  `json:"name"`
+	Pos   Pointer `json:"pos"`
+	Score int     `json:"score"`
 }
 
-type ResponsePost struct {
-	Mouth      bool `json:"mouth"`
-	Response   bool `json:"response"`
-	Room       int  `json:"room"`
-	PlayerName int  `json:"player_name"`
-	Question   int  `json:"question"`
+type SendData struct {
+	Room     int                `json:"room"`
+	Question []int              `json:"question"`
+	Score    map[string]int     `json:"score"`
+	Pos      map[string]Pointer `json:"pos"`
+}
+
+func InitSendData() *SendData {
+	return &SendData{
+		Question: make([]int, 10),
+		Score:    make(map[string]int),
+		Pos:      make(map[string]Pointer),
+	}
 }

@@ -3,7 +3,40 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../../styles/playing.module.css'
 
+import { send } from 'process';
+import { render } from 'react-dom';
+import { json } from 'stream/consumers';
+
 import CustomHead from '../components/customhead'
+import LoadingPage from '../components/loadingpage'
+import ErrorPage from '../components/errorpage'
+import Question01 from '../components/question01'
+import Question02 from '../components/question02'
+import Question03 from '../components/question03'
+import Question04 from '../components/question04'
+import Question05 from '../components/question05'
+import Question06 from '../components/question06'
+import Question07 from '../components/question07'
+import Question08 from '../components/question08'
+import Question09 from '../components/question09'
+import Question10 from '../components/question10'
+import Question11 from '../components/question11'
+import Question12 from '../components/question12'
+import Question13 from '../components/question13'
+import Question14 from '../components/question14'
+import Question15 from '../components/question15'
+import Question16 from '../components/question16'
+import Question17 from '../components/question17'
+import Question18 from '../components/question18'
+import Question19 from '../components/question19'
+import Question20 from '../components/question20'
+import Question21 from '../components/question21'
+import Question22 from '../components/question22'
+import Question23 from '../components/question23'
+import Question24 from '../components/question24'
+import Question25 from '../components/question25'
+
+var questions: number[];
 
 export default function Playing() {
 
@@ -12,8 +45,13 @@ export default function Playing() {
     const [message, setMessage] = React.useState('')
     const [sendMessage, setSendMessage] = React.useState('')
 
-    const sendJson = createJson();
-    
+    const [clock, setClock] = React.useState(false)
+    const [uuid, setUuid] = React.useState('')
+    const [score, setScore] = React.useState(0)
+    const [progress, setProgress] = React.useState(0)
+    const [mousePos, setMousePos] = React.useState([0, 0])
+    const [windowSize, setWindowSize] = React.useState([0, 0])
+
     React.useEffect(() => {
         
         // Dockerでバックエンドを動かす時用
@@ -21,120 +59,224 @@ export default function Playing() {
         // デプロイ先のバックエンドを動かす用
         // socketRef.current = new WebSocket('wss://hajimete-hackathon-2022.onrender.com/ws/123?v=1.0')
 
+        // 接続時のソケット処理
         console.log(socketRef)
         socketRef.current.onopen = function () {
             setIsConnected(true)
             console.log('Connected')
         }
         
+        // 切断時のソケット処理
         socketRef.current.onclose = function () {
             console.log('closed')
+            localStorage.removeItem('uuid')
             setIsConnected(false)
         }
 
+        // マウス座標取得
+        const updateMousePosition = (event: { clientX: any; clientY: any; }) => {
+            setMousePos([event.clientX, event.clientY]);
+        };
+        window.addEventListener('mousemove', updateMousePosition);
+
+        // タイマー設定
+        const id = setInterval(() => {
+            setClock(true)
+        }, 50);
+        return () => {
+            clearInterval(id);
+        }
+        
     }, [])
 
-    const test = () => {
-        socketRef.current?.send(sendMessage)
-    }
-    if(socketRef.current){
-        socketRef.current.onmessage = function (ev) {
-            console.log(ev.data)
-            setMessage(ev.data)
+    // 常時実行すること
+    React.useEffect(() => {
+
+        setSendMessage(createJson(uuid, windowSize, mousePos, score))
+        sendSocket()
+        setProgress(progress+1)
+
+        if (jsonFormatter(message).indexOf('{') === 0) {
+            const json = JSON.parse(jsonFormatter(message))
+            questions = json.question
         }
-    }
-    React.useEffect(()=>{
+
+        setClock(false)
+    }, [clock])
+
+    // ソケット受信, UUID取得
+    React.useEffect(() => {
         if(socketRef.current){
             socketRef.current.onmessage = function (ev) {
-                console.log(ev.data)
+                if (!(ev.data.indexOf('{') === 0)) {
+                    console.log(ev.data)
+                    setUuid(ev.data)
+                }
                 setMessage(ev.data)
             }
         }
+    }, [socketRef.current])
 
-    },[socketRef.current?.onmessage])
+    // ウィンドウサイズ取得
+    React.useLayoutEffect(() => {
+        const updateSize = (): void => {
+            setWindowSize([window.innerWidth, window.innerHeight]);
+        };
+        window.addEventListener('resize', updateSize);
+        updateSize();
+    }, []);
+
+    // ソケット送信
+    const sendSocket = () => {
+        if (socketRef.current?.readyState === 1)
+            socketRef.current?.send(sendMessage)
+    }
 
     return (
         
-        <div className='{styles.container}'>
-            
-        <CustomHead/>
-
-            <main className='{styles.main}'>
-
-                    <h1>WebSocket is connected : {`${isConnected}`}</h1>
-
-                    <Link href="/">
-                        <p>TopPage</p>
-                    </Link><br/>
-
-                    <div className="buttun"><button onClick={test}>test</button></div>
-                    <input onChange={(e)=>{setSendMessage(sendJson)}}>
-                    </input>
-
-                    <div>{message}</div>
-
-                    <img src="/minecraft.png" />;
-
-            </main>
+        <div>
+            <CustomHead/>
+            {detRenderer(progress, questions)}
+            {renderTimer(progress)}
+            {renderScores(jsonFormatter(message), uuid)}
+            {renderPointers(jsonFormatter(message), uuid, windowSize)}
         </div>
 
     );
 
 }
 
-const useWindowSize = (): number[] => {
-    const [
-        size,
-        setSize
-    ] = React.useState([0, 0]);
-
-    React.useLayoutEffect(() => {
-
-        const updateSize = (): void => {
-            setSize([window.innerWidth, window.innerHeight]);
-        };
-
-        window.addEventListener('resize', updateSize);
-        updateSize();
-        return () => window.removeEventListener('resize', updateSize);
-
-    }, []);
-
-    return size;
-};
-
-const useMousePosition = () => {
-    const [
-        mousePosition,
-        setMousePosition
-    ] = React.useState([0, 0]);
-
-    React.useEffect(() => {
-
-        const updateMousePosition = (event: { clientX: any; clientY: any; }) => {
-            setMousePosition([event.clientX, event.clientY]);
-        };
-
-        window.addEventListener('mousemove', updateMousePosition);
-        return () => window.removeEventListener('mousemove', updateMousePosition);
-        
-    }, []);
-
-    return mousePosition;
-};
-
-const createJson = () => {
-
-    const [clientX, clientY] = [
-        useMousePosition()[0]/useWindowSize()[0],
-        useMousePosition()[1]/useWindowSize()[1]
-    ];
-
-    var obj = {
-        name: "",
-        pos: [clientX, clientY]
+const detRenderer = (prog: number, qList: number[]) => {
+    var prog5sec: number = Math.floor(prog/200)
+    switch (prog5sec) {
+        case(0): return <LoadingPage/>
+        case(1): return getQuestion(qList[0])
+        case(2): return getQuestion(qList[1])
+        case(3): return getQuestion(qList[2])
+        case(4): return getQuestion(qList[3])
+        case(5): return getQuestion(qList[4])
+        case(6): return getQuestion(qList[5])
+        case(7): return getQuestion(qList[6])
+        case(8): return getQuestion(qList[7])
+        case(9): return getQuestion(qList[8])
+        case(10): return getQuestion(qList[9])
+        case(11): return <div>Result</div>
+        default: return <ErrorPage/>
     }
+}
 
+const getQuestion = (qId: number) => {
+    switch (qId%2) {
+        case(0): return <Question01/>
+        case(1): return <Question02/>
+        case(2): return <Question03/>
+        case(3): return <Question04/>
+        case(4): return <Question05/>
+        case(5): return <Question06/>
+        case(6): return <Question07/>
+        case(7): return <Question08/>
+        case(8): return <Question09/>
+        case(9): return <Question10/>
+        case(10): return <Question11/>
+        case(11): return <Question12/>
+        case(12): return <Question13/>
+        case(13): return <Question14/>
+        case(14): return <Question15/>
+        case(15): return <Question16/>
+        case(16): return <Question17/>
+        case(17): return <Question18/>
+        case(18): return <Question19/>
+        case(19): return <Question20/>
+        case(20): return <Question21/>
+        case(21): return <Question22/>
+        case(22): return <Question23/>
+        case(23): return <Question24/>
+        case(24): return <Question25/>
+        default: return <ErrorPage/>
+    }
+}
+
+const renderTimer = (prog: number) => {
+    var barString = ''
+    for (var i=0; i<20; i++) {
+        barString += (i < (prog%200)/10) ? '' : '█'
+    }
+    if (Math.floor(prog/200) > 0 && Math.floor(prog/200) <= 10)
+        return (
+            <div className = "scorebox">
+                <div style={{top: '3%', left: '5%', fontSize: '160%', color: '#ffffff'}}>TIME</div>
+                <div style={{top: '10%', left: '5%', fontSize: '120%', color: '#ffffff'}}>{barString}</div>
+                <div style={{top: '15%', left: '5%', fontSize: '120%', color: '#ffffff'}}>{barString}</div>
+            </div>
+        )
+    else return <></>
+}
+
+const renderScores = (message: string, uuid: string) => {
+    if (message.indexOf('{') === 0) {
+        const json = JSON.parse(message)
+        var ret = [], cnt = 0;
+        for (let id in json.score) {
+            if (id === uuid) {
+                ret.push(
+                    <div style={{top: '30%', left: '5%', fontSize: '200%', color: '#ffffff'}}>
+                        YOU {json.score[id]}pt</div>
+                )
+            }
+        }
+        for (let id in json.score) {
+            cnt++;
+            var margin = cnt*10 + 30
+            if (id !== uuid) {
+                ret.push(
+                    <div style={{top: margin.toString()+'%', left: '5%', fontSize: '200%', color: '#ffffff'}}>
+                        Other {json.score[id]}pt</div>
+                )
+            }
+        }
+        return (
+            <div className = "scorebox">
+                {ret}
+            </div>
+        )
+    }
+}
+
+const renderPointers = (message: string, uuid: string, windowSize: number[]) => {
+    if (message.indexOf('{') === 0) {
+        const json = JSON.parse(message)
+        var ret = []
+        for (let id in json.pos) {
+            if (id === uuid) {
+                var x = (json.pos[id].x * windowSize[0]).toString() + 'px'
+                var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
+                var e = (
+                    <div style={{position: 'absolute', top: y, left: x}}>
+                        <img src={'/pointer.png'} alt='mouse pointer' width='200px'/>
+                    </div>
+                )
+                ret.push(e)
+            }
+        }
+        return ret
+    }
+}
+
+const createJson = (uuid: string, windowSize: number[], mousePos: number[], score: number) => {
+    var obj = {
+        name: uuid,
+        room: 0,
+        pos: {
+            x: mousePos[0]/windowSize[0],
+            y: mousePos[1]/windowSize[1]
+        },
+        score: score
+    }
     return JSON.stringify(obj);
+}
 
+const jsonFormatter = (json: string) => {
+    var n = json.indexOf('}{')
+    if (n == -1) return json
+    else return json.substring(0,n+1)
 }
