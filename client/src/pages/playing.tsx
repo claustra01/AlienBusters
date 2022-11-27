@@ -173,7 +173,7 @@ const detRenderer = (prog: number, qList: number[]) => {
 }
 
 const getQuestion = (qId: number) => {
-    switch (qId%2) {
+    switch (qId) {
         case(0): return <Question01/>
         case(1): return <Question02/>
         case(2): return <Question03/>
