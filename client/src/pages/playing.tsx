@@ -37,6 +37,13 @@ import Question24 from '../components/question24'
 import Question25 from '../components/question25'
 
 var questions: number[];
+const answers: number[] = [
+    1, 4, 2, 5, 4,
+    3, 1, 4, 2, 1,
+    5, 5, 3, 1, 3,
+    4, 2, 1, 5, 4,
+    3, 1, 2, 5, 2
+]
 
 export default function Playing() {
 
