@@ -10,7 +10,31 @@ import { json } from 'stream/consumers';
 import CustomHead from '../components/customhead'
 import LoadingPage from '../components/loadingpage'
 import ErrorPage from '../components/errorpage'
-import GamePage from './gamepage'
+import Question01 from '../components/question01'
+import Question02 from '../components/question02'
+import Question03 from '../components/question03'
+import Question04 from '../components/question04'
+import Question05 from '../components/question05'
+import Question06 from '../components/question06'
+import Question07 from '../components/question07'
+import Question08 from '../components/question08'
+import Question09 from '../components/question09'
+import Question10 from '../components/question10'
+import Question11 from '../components/question11'
+import Question12 from '../components/question12'
+import Question13 from '../components/question13'
+import Question14 from '../components/question14'
+import Question15 from '../components/question15'
+import Question16 from '../components/question16'
+import Question17 from '../components/question17'
+import Question18 from '../components/question18'
+import Question19 from '../components/question19'
+import Question20 from '../components/question20'
+import Question21 from '../components/question21'
+import Question22 from '../components/question22'
+import Question23 from '../components/question23'
+import Question24 from '../components/question24'
+import Question25 from '../components/question25'
 
 var questions: number[];
 
@@ -143,8 +167,31 @@ const detRenderer = (prog: number, qList: number[]) => {
 
 const getQuestion = (qId: number) => {
     switch (qId%2) {
-        case(0): return <div>Question</div>
-        case(1): return <GamePage/>
+        case(0): return <Question01/>
+        case(1): return <Question02/>
+        case(2): return <Question03/>
+        case(3): return <Question04/>
+        case(4): return <Question05/>
+        case(5): return <Question06/>
+        case(6): return <Question07/>
+        case(7): return <Question08/>
+        case(8): return <Question09/>
+        case(9): return <Question10/>
+        case(10): return <Question11/>
+        case(11): return <Question12/>
+        case(12): return <Question13/>
+        case(13): return <Question14/>
+        case(14): return <Question15/>
+        case(15): return <Question16/>
+        case(16): return <Question17/>
+        case(17): return <Question18/>
+        case(18): return <Question19/>
+        case(19): return <Question20/>
+        case(20): return <Question21/>
+        case(21): return <Question22/>
+        case(22): return <Question23/>
+        case(23): return <Question24/>
+        case(24): return <Question25/>
         default: return <ErrorPage/>
     }
 }
