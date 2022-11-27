@@ -125,6 +125,16 @@ export default function Playing() {
         }
     }, [socketRef.current])
 
+    // 答え合わせ
+    React.useEffect(() => {
+        var prog5sec: number = Math.floor(progress/200)
+        if (prog5sec > 0 && prog5sec <= 10) {
+            var qNow = questions[prog5sec-1]
+            var aNow = answers[qNow]
+            
+        }
+    }, [])
+
     // ウィンドウサイズ取得
     React.useLayoutEffect(() => {
         const updateSize = (): void => {
@@ -140,8 +150,8 @@ export default function Playing() {
             socketRef.current?.send(sendMessage)
     }
 
+    // ページ描画
     return (
-        
         <div>
             <CustomHead/>
             {detRenderer(progress, questions)}
@@ -149,7 +159,6 @@ export default function Playing() {
             {renderScores(jsonFormatter(message), uuid)}
             {renderPointers(jsonFormatter(message), uuid, windowSize)}
         </div>
-
     );
 
 }
@@ -260,7 +269,7 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
                 var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
                 var e = (
                     <div style={{position: 'absolute', top: y, left: x}}>
-                        <img src={'/pointer.png'} alt='mouse pointer' width='200px'/>
+                        <img src={'/hogefuga.png'} alt=' ' width='200px'/>
                     </div>
                 )
                 ret.push(e)
