@@ -25,10 +25,6 @@ export default function Rooms() {
                             <p>Start</p>
                         </Link>
                         <br></br>
-                        <Link href="/test_socket">
-                            <p>SocketTest</p>
-                        </Link>
-                        <br></br>
                         <Link href="/gamepage">
                             <p>gamepage</p>
                         </Link>
