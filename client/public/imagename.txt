@@ -1,0 +1,25 @@
+//ailian blue 1
+// ailian yellow 2
+// ailian red    3
+// ailian green  4
+// ailian perpull 5     
+//dosei blue 6
+//dosei yellow 7
+//dosei red 8
+//dosei green 9
+//dosei perpull 10
+//rocketblue 11
+//rocketyellow 12
+//rocketred 13
+//rocketgreen 14
+//rocketperpull 15 
+//starblue 16
+//staryellow 17
+//starred 18
+//stargreen 19 
+//starperpull 20
+//stormblue 21
+//stormyellow 22
+//stormred 23
+//stormgreen 24
+//stormperpull 25

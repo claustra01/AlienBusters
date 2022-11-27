@@ -1,0 +1,106 @@
+.boxborder{
+  
+    width:100vw;
+    height:100vh;
+   
+    margin:auto;
+    border: 6px solid rgb(255, 255, 255);
+}
+
+.questionbox{
+    width:30vw;
+    height:40vh;
+   
+    margin:auto;
+    border: 2px solid rgb(255, 255, 255);
+
+    background-color:white;
+    opacity: 0.6;
+
+}
+.scorebox{
+    width:30vw;
+    height:60vh;
+
+    top:40vh;
+   
+    margin:auto;
+    border: 2px solid rgb(255, 255, 255);
+
+}
+
+.displaybox{
+    width:70vw;
+    height:100vh;
+    margin-left:30vw;
+    border: 2px solid rgb(255, 255, 255);
+    background-image: url("../public/space.png"); 
+    box-shadow:50px 50px 200px 100px rgb(0, 0, 0) inset;
+}
+
+.cardbox1{
+    width:17vw;
+    height:35vh;
+    border: 1px solid rgb(255, 255, 255);
+    /* background-image: url("../public/1.png"); */
+    top:10vh;
+    margin-left:5vw;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+   
+}
+
+.cardbox2{
+    width:17vw;
+    height:35vh;
+    border: 1px solid rgb(78, 58, 58);
+    /* background-image: url("../public/2.png"); */
+    top:35vh;
+    margin-left:25vw;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.cardbox3{
+    width:17vw;
+    height:35vh;
+    /* background-image: url("../public/3.png"); */
+    border: 1px solid rgb(255, 255, 255);
+
+    top:55vh;
+    margin-left:5vw;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.cardbox4{
+    /* background-image: url("../public/4.png"); */
+    width:17vw;
+    height:35vh;
+    border: 1px solid rgb(255, 255, 255);
+
+    top:5vh;
+    margin-left:50vw;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.cardbox5{
+    width:17vw;
+    height:35vh;
+    border: 1px solid rgb(255, 255, 255);
+    /* background-image: url("../public/5.png"); */
+    top:55vh;
+    margin-left:50vw;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+
+
+ul{
+    display:flex;
+}
+
