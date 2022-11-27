@@ -9,6 +9,7 @@ import { json } from 'stream/consumers';
 
 import CustomHead from '../components/customhead'
 import LoadingPage from '../components/loadingpage'
+import ResultPage from '../components/resultpage'
 import ErrorPage from '../components/errorpage'
 import Question01 from '../components/question01'
 import Question02 from '../components/question02'
@@ -171,7 +172,7 @@ export default function Playing() {
 const detRenderer = (prog: number, qList: number[]) => {
     var prog5sec: number = Math.floor(prog/200)
     switch (prog5sec) {
-        case(0): return <LoadingPage/>
+        case(0): return <ResultPage/>
         case(1): return getQuestion(qList[0])
         case(2): return getQuestion(qList[1])
         case(3): return getQuestion(qList[2])
@@ -182,7 +183,7 @@ const detRenderer = (prog: number, qList: number[]) => {
         case(8): return getQuestion(qList[7])
         case(9): return getQuestion(qList[8])
         case(10): return getQuestion(qList[9])
-        case(11): return <div>Result</div>
+        case(11): return <ResultPage/>
         default: return <ErrorPage/>
     }
 }
@@ -269,11 +270,11 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
         const json = JSON.parse(message)
         var ret = []
         for (let id in json.pos) {
-            if (id === uuid) {
+            if (id !== uuid) {
                 var x = (json.pos[id].x * windowSize[0]).toString() + 'px'
                 var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
                 var e = (
-                    <div style={{position: 'absolute', top: y, left: x, zIndex:-1000}}>
+                    <div style={{position: 'absolute', top: y, left: x, zIndex:1000}}>
                         <img src={'/hogefuga.png'} alt=' ' width='200px'/>
                     </div>
                 )
