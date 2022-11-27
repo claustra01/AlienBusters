@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/fasthttp/websocket"
@@ -49,6 +50,8 @@ type Client struct {
 	send chan []byte
 
 	id string
+
+	mu sync.Mutex
 }
 
 func (c *Client) readPump() {
@@ -77,6 +80,7 @@ func (c *Client) readPump() {
 		}
 		// data, _ := json.Marshal(&dat)
 		// c.room.broadcast <- []byte(data)
+		c.room.mu.Lock()
 		c.room.senddata.Room = 1
 		pos := Pointer{PointerX: dat.Pos.PointerX, PointerY: dat.Pos.PointerY}
 		c.room.senddata.Pos[c.id] = pos
@@ -84,6 +88,7 @@ func (c *Client) readPump() {
 		// GenerateQ(c.room.question["test"])
 		c.room.senddata.Question = c.room.question["test"]
 		data, _ := json.Marshal(&c.room.senddata)
+		c.room.mu.Unlock()
 		c.room.broadcast <- []byte(data)
 	}
 }
