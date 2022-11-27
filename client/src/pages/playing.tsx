@@ -133,7 +133,7 @@ export default function Playing() {
         if (prog5sec > 0 && prog5sec <= 10) {
             var qNow = questions[prog5sec-1]
             var aNow = answers[qNow]
-            var bonus = 0
+            var bonus = Math.floor((200-(progress%200)) / 50)
             if (clickedObj == aNow) setScore(score+(5+bonus))
             else setScore(Math.max(0, score-(5+bonus)))
         }
