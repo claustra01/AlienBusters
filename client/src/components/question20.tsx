@@ -13,19 +13,19 @@ export default function Gamepage() {
            <ul>
               <div>
               <div className="questionbox" >
-                <img src="/2.png" width="60%" style={{left:"20%"}}  alt="aaaa" />
+                <img src="/20.png" width="60%" style={{left:"20%"}}  alt="aaaa" />
               </div>
             
                <div className = "scorebox"></div>
               </div>
               <div className = "displaybox">
                 
-                {/* ans=4 */}
-               <img src="/22.png" className = "cardbox1"/>
-               <img src="/18.png" className = "cardbox2"/>
-               <img src="/6.png" className = "cardbox3"/>
-               <img src="/2.png" className = "cardbox4"/>
-               <img src="/13.png" className = "cardbox5"/>
+                {/* ans=20*/}
+               <img src="/5.png" className = "cardbox1"/>
+               <img src="/24.png" className = "cardbox2"/>
+               <img src="/3.png" className = "cardbox3"/>
+               <img src="/20.png" className = "cardbox4"/>
+               <img src="/18.png" className = "cardbox5"/>
               </div>
            </ul>
           </div>
