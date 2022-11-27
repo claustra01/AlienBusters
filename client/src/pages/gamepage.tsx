@@ -11,8 +11,11 @@ export default function Gamepage() {
 
           <div className = "boxborder">
            <ul>
-              <div> 
-               <div className = "questionbox"></div>
+              <div>
+              <div className="questionbox" >
+                <img src="/1.png" width="60%" style={{left:"20%"}}  alt="aaaa" />
+              </div>
+            
                <div className = "scorebox"></div>
               </div>
               <div className = "displaybox">
