@@ -4,17 +4,14 @@ import Link from 'next/link'
 import styles from '../../styles/home.module.css'
 // import ghost from '../../styles/index.module.css'
 // import '../../styles/ghost.css'
+import CustomHead from '../components/customhead'
 
 
 export default function Home() {
     return (
 
         <div className='{styles.container} hogebody'>
-
-            <Head>
-                <title>Kizukuと愉快な仲間たち</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head> 
+            <CustomHead/>
 
             <main className='{styles.main}'>
 
