@@ -110,6 +110,9 @@ export default function Playing() {
             questions = json.question
         }
         setClock(false)
+
+        console.log(clickedObj)
+
     }, [clock])
 
     // ソケット受信, UUID取得
@@ -128,12 +131,14 @@ export default function Playing() {
     // 答え合わせ
     React.useEffect(() => {
         var prog5sec: number = Math.floor(progress/200)
+        console.log('called')
         if (prog5sec > 0 && prog5sec <= 10) {
             var qNow = questions[prog5sec-1]
             var aNow = answers[qNow]
-            
+            if (clickedObj == aNow) setScore(score+5)
+            else setScore(Math.max(0, score-5))
         }
-    }, [])
+    }, [clickedObj])
 
     // ウィンドウサイズ取得
     React.useLayoutEffect(() => {
@@ -268,7 +273,7 @@ const renderPointers = (message: string, uuid: string, windowSize: number[]) => 
                 var x = (json.pos[id].x * windowSize[0]).toString() + 'px'
                 var y = (json.pos[id].y * windowSize[1]).toString() + 'px'
                 var e = (
-                    <div style={{position: 'absolute', top: y, left: x}}>
+                    <div style={{position: 'absolute', top: y, left: x, zIndex:-1000}}>
                         <img src={'/hogefuga.png'} alt=' ' width='200px'/>
                     </div>
                 )
